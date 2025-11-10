@@ -18,15 +18,15 @@ CREATE TABLE listings (
     price_per_night INTEGER NOT NULL,
     start_available_date DATE NOT NULL,
     end_available_date DATE NOT NULL,
-    host_id INTEGER NOT NULL REFERENCES users(id)
+    host_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE bookings (
     id SERIAL PRIMARY KEY,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    listing_id INTEGER NOT NULL REFERENCES listings(id),
-    guest_id INTEGER NOT NULL REFERENCES users(id),
+    listing_id INTEGER NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
+    guest_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     status TEXT DEFAULT 'pending'
 );
 
