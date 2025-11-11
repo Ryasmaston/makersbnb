@@ -34,3 +34,25 @@ class ListingRepository:
     def delete(self, listing_id):
         self._connection.execute('DELETE FROM listings WHERE id = %s', [listing_id])
         return None
+
+    # Gets the start_available_date and end_available_date for a listing.
+    def get_available_dates(self, listing_id):
+        dates = self._connection.execute('SELECT start_available_date, end_available_date from listings WHERE id = %s', [listing_id])
+        return dates
+
+    # Returns listings that are available between start_date + end_date
+    # And does not clash with any existing, confirmed bookings
+    def get_available_listings_between_dates(self, start_date, end_date):
+        rows = self._connection.execute("""SELECT * FROM listings
+                                        WHERE start_available_date <= %s
+                                        AND end_available_date  >= %s
+                                        AND id NOT IN (
+                                            SELECT listing_id FROM bookings
+                                            WHERE status = 'confirmed'
+                                            AND NOT (%s > end_date OR %s < start_date)
+        )""", [start_date, end_date, start_date, end_date])
+        listings = []
+        for row in rows:
+            item = Listing(row["id"], row["title"], row["description"], row["price_per_night"], row["start_available_date"], row["end_available_date"], row["host_id"])
+            listings.append(item)
+        return listings

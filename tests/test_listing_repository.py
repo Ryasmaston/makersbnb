@@ -61,3 +61,34 @@ def test_delete_record(db_connection):
         Listing(1, 'Cozy Cabin in the Woods', 'A small rustic cabin with beautiful forest views.', 120, date(2025, 1, 1), date(2025, 12, 31), 1),
         Listing(2, 'Modern Apartment Downtown', 'Close to shops, cafes, and nightlife.', 200, date(2025, 2, 1), date(2025, 8, 31), 2)
     ]
+
+"""
+When we call ListingRepository.get_valid_dates_of_listing(listing_id)
+Return the start_available_dates, end_available_dates for listing_id
+"""
+def test_get_available_dates():
+    pass
+
+def test_get_available_listings_between_dates(db_connection):
+    db_connection.seed("seeds/makersbnb.sql")
+    repository = ListingRepository(db_connection)
+    start, end = date(2025, 10, 16), date(2025, 11, 8)
+    listings = repository.get_available_listings_between_dates(start, end)
+    assert listings == [
+        Listing(1, "Cozy Cabin in the Woods", "A small rustic cabin with beautiful forest views.", 120, date(2025, 1, 1), date(2025, 12, 31), 1),
+        Listing(3, "Beachside Bungalow", "Steps away from the ocean with amazing sunsets.", 180, date(2025, 3, 15), date(2025, 11, 15), 1),
+    ]
+
+"""
+When we call get_available_listing_for_dates
+"""
+def test_get_available_listings_between_dates_all_valid(db_connection):
+    db_connection.seed("seeds/makersbnb.sql")
+    repository = ListingRepository(db_connection)
+    start, end = date(2025, 3, 16), date(2025, 3, 18)
+    listings = repository.get_available_listings_between_dates(start, end)
+    assert listings == [
+        Listing(1, "Cozy Cabin in the Woods", "A small rustic cabin with beautiful forest views.", 120, date(2025, 1, 1), date(2025, 12, 31), 1),
+        Listing(2, "Modern Apartment Downtown", "Close to shops, cafes, and nightlife.", 200, date(2025, 2,  1), date(2025, 8, 31), 2),
+        Listing(3, "Beachside Bungalow", "Steps away from the ocean with amazing sunsets.", 180, date(2025, 3, 15), date(2025, 11, 15), 1),
+    ]
