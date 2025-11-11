@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session
 from lib.database_connection import get_flask_database_connection
 
 # Create a new Flask app
@@ -15,8 +15,36 @@ app = Flask(__name__)
 def get_index():
     return render_template('index.html')
 
+
+@app.route('/sessions/new', methods=['GET'])
+def get_login_page():
+    pass
+
+@app.route('/listings', methods=['GET'])
+def get_login_page():
+    pass
+
+@app.route('/listings/new', methods=['POST'])
+def get_login_page():
+    pass
+
+
+@app.route('/listings/<id>', methods=['GET'])
+def get_login_page():
+    pass
+
+@app.route('/requests', methods=['GET'])
+def get_login_page():
+    pass
+
+@app.route('/requests/<id>', methods=['GET'])
+def get_login_page():
+    pass
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
 # if started in test mode.
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.environ.get('PORT', 5001)))
+
+
+
