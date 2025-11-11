@@ -47,3 +47,22 @@ def test_delete_booking(db_connection):
         Booking(2, date(2025, 5, 10), date(2025, 5, 15), 2, 3, 'pending'),
         Booking(3, date(2025, 7, 20), date(2025, 7, 25), 3, 2, 'cancelled')
     ]
+
+
+def test_total_price(db_connection):
+    db_connection.seed("seeds/makersbnb.sql")
+    repo = BookingRepository(db_connection)
+    assert repo.total_price(1) == 4 * 120
+
+def test_approve_booking(db_connection):
+    db_connection.seed("seeds/makersbnb.sql")
+    repo = BookingRepository(db_connection)
+
+    updated = repo.approve_booking(2)
+    assert updated is True
+
+    b2 = repo.find(2)
+    assert b2.status == "confirmed"
+
+    updated_again = repo.approve_booking (2)
+    assert updated_again is False
