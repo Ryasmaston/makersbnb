@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{% block title %}MakersBnB{% endblock %}</title>
+        <link rel="stylesheet" href="/static/style.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.3/dist/basecoat.cdn.min.css"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.3/dist/js/all.min.js"
+            defer
+        ></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+        </style>
+    </head>
+    <body>
+        <section
+            id="header"
+            class="flex flex-row p-3 justify-between items-center"
+        >
+            <div class="flex items-center mx-6 my-4">
+                <img
+                    src="./static/assets/IMG_8796.jpg"
+                    alt="MakersBnB Logo"
+                    class="h-8"
+                />
+                <h2 id="logo" class="text-3xl font-bold mx-2">MakersBnB</h2>
+            </div>
+            <div id="header-session-controls" class="flex gap-4 mx-10">
+                <!-- TODO: Conditional logic for signed in user-->
+                <a href="/">Sign In</a>
+                <a href="/">Log Out</a>
+            </div>
+        </section>
+        <main>{% block content %} {% endblock %}</main>
+    </body>
+</html>

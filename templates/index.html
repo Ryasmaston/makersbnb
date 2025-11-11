@@ -1,15 +1,52 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>MakersBnB</title>
+{% extends "base.html" %} {% block title %}Home | MakersBnB{% endblock %} {%
+block content %}
+<div class="flex flex-col items-center">
+    <div id="hero">
+        <h2 class="text-5xl font-bold text-center mt-10">
+            Feel at home, anywhere
+        </h2>
+        <p class="text-center mt-4 text-xl">
+            Join or login now to view thousands of spaces, ready for your next
+            stay.
+        </p>
+    </div>
+    <div class="card w-100 mt-16">
+        <header>
+            <h2>Login to your account</h2>
+            <p>Enter your details below to login to your MakersBnB account</p>
+        </header>
+        <section>
+            <form class="form grid gap-6">
+                <div class="grid gap-2">
+                    <label for="demo-card-form-email">Email</label>
+                    <input type="email" id="demo-card-form-email" />
+                </div>
+                <div class="grid gap-2">
+                    <div class="flex items-center gap-2">
+                        <label for="demo-card-form-password">Password</label>
+                        <a
+                            href="#"
+                            class="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                            >Forgot your password?</a
+                        >
+                    </div>
+                    <input type="password" id="demo-card-form-password" />
+                </div>
+            </form>
+        </section>
+        <footer class="flex flex-col items-center gap-2">
+            <button type="button" class="btn w-full">Login</button>
+            <button type="button" class="btn-outline w-full">
+                Login with Google
+            </button>
+            <p class="mt-4 text-center text-sm">
+                Don't have an account?
+                <a href="#" class="underline-offset-4 hover:underline"
+                    >Sign up</a
+                >
+            </p>
+        </footer>
+    </div>
+</div>
 
-        <!--
-            Head to https://github.com/makersacademy/web-applications-in-python/blob/main/pills/loading_css_or_static_files.md
-            If you're wondering how the CSS file below is being loaded.
-        -->
-        <link rel="stylesheet" href="/static/style.css" >
-    </head>
-    <body>
-        <p>This is the homepage.</p>
-    </body>
-</html>
+{% endblock %}
