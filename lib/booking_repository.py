@@ -30,3 +30,36 @@ class BookingRepository:
     def delete(self, booking_id):
         self._connection.execute('DELETE FROM bookings WHERE id = %s', [booking_id])
         return None
+    
+    def total_price(self, booking_id):
+        """
+        total = (end_date - start_date in days) * listing.price_per_night
+        """
+        sql = """
+        SELECT
+        (b.end_date - b.start_date) * l.price_per_night AS total_price
+        FROM bookings b
+        JOIN listings l ON l.id = b.listing_id
+        WHERE b.id = %s;
+        """
+        rows = self._connection.execute(sql, [booking_id])
+        if not rows or rows[0]["total_price"] is None:
+            raise ValueError("Booking not found or dates missing")
+        return int(rows[0]["total_price"])
+
+    def approve_booking(self, booking_id):
+        """
+        Set booking from 'pending' -> 'confirmed'.
+        Returns True if updated, False otherwise.
+        """
+        sql = """
+        UPDATE bookings
+        SET status = 'confirmed'
+        WHERE id = %s AND status = 'pending'
+        RETURNING id;
+        """
+        rows = self._connection.execute(sql, [booking_id])
+        return bool(rows)
+
+
+
