@@ -40,6 +40,9 @@ def get_login_page():
 @app.route('/requests/<id>', methods=['GET'])
 def get_login_page():
     pass
+
+from routes.login_routes import apply_login_route
+apply_login_route(app)
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
 # if started in test mode.
