@@ -19,7 +19,7 @@
                 <div
                     class="card w-85 h-min flex flex-col justify-end shadow-2xl rounded-2xl cursor-pointer transition-transform transition-shadow duration-[220ms] ease-[cubic-bezier(.22,.94,.16,1)] will-change-[transform,box-shadow] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(75,75,75,0.32)]"
                     id="{{listing.id}}"
-                    onclick="document.getElementById('listing-{{listing.id}}-dialog').showModal()"
+                    onclick="document.getElementById('listing-{{listing.id}}-dialog').showModal()""
                 >
                     <header>
                         <h3 class="truncate">{{listing.title}}</h3>
@@ -116,44 +116,98 @@
                     aria-describedby="listing-{{listing.id}}-description"
                     onclick="if (event.target === this) this.close()"
                 >
-                    <div>
-                        <header>
+                    <div class="p-0">
+                        <header class="p-8 pb-2">
                             <h2 id="listing-{{listing.id}}-title">
                                 {{listing.title}}
                             </h2>
                             <p id="listing-{{listing.id}}-description">
                                 {{listing.description}}
                             </p>
+                            <div class="flex items-center gap-2 pt-2">
+                                <span class="badge-outline">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path d="M2 4v16" />
+                                        <path d="M2 8h18a2 2 0 0 1 2 2v10" />
+                                        <path d="M2 17h20" />
+                                        <path d="M6 8v9" />
+                                    </svg>
+                                    1
+                                </span>
+                                <span class="badge-outline">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path d="M10 4 8 6" />
+                                        <path d="M17 19v2" />
+                                        <path d="M2 12h20" />
+                                        <path d="M7 19v2" />
+                                        <path
+                                            d="M9 5 7.621 3.621A2.121 2.121 0 0 0 4 5v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
+                                        />
+                                    </svg>
+                                    2
+                                </span>
+                                <span class="badge-outline">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path d="m12 8 6-3-6-3v10" />
+                                        <path
+                                            d="m8 11.99-5.5 3.14a1 1 0 0 0 0 1.74l8.5 4.86a2 2 0 0 0 2 0l8.5-4.86a1 1 0 0 0 0-1.74L16 12"
+                                        />
+                                        <path d="m6.49 12.85 11.02 6.3" />
+                                        <path d="M17.51 12.85 6.5 19.15" />
+                                    </svg>
+                                    350m²
+                                </span>
+                                <span class="ml-auto font-medium tabular-nums">
+                                    £{{listing.price_per_night}} / night
+                                </span>
+                            </div>
                         </header>
 
-                        <section>
-                            <form class="form grid gap-4">
-                                <div class="grid gap-3">
-                                    <label for="demo-dialog-edit-profile-name"
-                                        >Name</label
-                                    >
-                                    <input
-                                        type="text"
-                                        value="Pedro Duarte"
-                                        id="demo-dialog-edit-profile-name"
-                                        autofocus
-                                    />
-                                </div>
-                                <div class="grid gap-3">
-                                    <label
-                                        for="demo-dialog-edit-profile-username"
-                                        >Username</label
-                                    >
-                                    <input
-                                        type="text"
-                                        value="@peduarte"
-                                        id="demo-dialog-edit-profile-username"
-                                    />
-                                </div>
-                            </form>
-                        </section>
+                        <img
+                            alt="MakersBNB listing image"
+                            loading="lazy"
+                            width="min-w-full"
+                            height="200"
+                            class="object-cover"
+                            style="color: transparent"
+                            srcset="
+                                https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=640&q=75  1x,
+                                https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75 2x
+                            "
+                            src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75"
+                        />
 
-                        <footer>
+                        <footer class="pb-12">
                             <button
                                 class="btn-outline"
                                 onclick="this.closest('dialog').close()"
