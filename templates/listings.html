@@ -211,11 +211,25 @@ block content %}
                             />
                         </form>
 
-                        <div class="ml-5 flex w-full flex-col justify-between">
-                            <p>Total: ...</p>
+                        <div class="ml-5 flex w-full flex-col justify-end">
+                            <div class="mb-2" style="min-height: 3rem">
+                                <p
+                                    id="total-nights-{{listing.id}}"
+                                    class="text-m text-gray-600"
+                                >
+                                    Select dates
+                                </p>
+                                <p
+                                    id="total-price-{{listing.id}}"
+                                    class="font-semibold text-xl"
+                                >
+                                    £0
+                                </p>
+                            </div>
                             <button
                                 class="btn"
-                                onclick="this.closest('dialog').close()"
+                                id="book-btn-{{listing.id}}"
+                                disabled
                             >
                                 Book
                             </button>
@@ -248,21 +262,48 @@ block content %}
 
             <script>
                 document.addEventListener("DOMContentLoaded", () => {
-                    flatpickr("#date-picker-{{listing.id}}", {
-                        // Target the unique ID
-                        // Selects a range of dates
+                    const pricePerNight = {{listing.price_per_night}};
+                    const listingId = {{listing.id}};
+
+                    flatpickr("#date-picker-" + listingId, {
                         mode: "range",
                         inline: true,
-
-                        // Other settings
                         dateFormat: "Y-m-d",
                         enable: [
                             {
-                                // IMPORTANT: Use quotes around Jinja variables for JS strings
                                 from: "{{listing.start_available_date}}",
                                 to: "{{listing.end_available_date}}",
                             },
                         ],
+                        onChange: function(selectedDates, dateStr, instance) {
+                            const totalNightsElement = document.getElementById("total-nights-" + listingId);
+                            const totalPriceElement = document.getElementById("total-price-" + listingId);
+                            const bookButton = document.getElementById("book-btn-" + listingId);
+
+                            if (selectedDates.length === 2) {
+                                const startDate = selectedDates[0];
+                                const endDate = selectedDates[1];
+
+                                // difference in days
+                                const diffTime = Math.abs(endDate - startDate);
+                                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                                // total price
+                                const totalPrice = diffDays * pricePerNight;
+
+                                // update the nights and total price html
+                                totalNightsElement.textContent = `${diffDays} night${diffDays !== 1 ? 's' : ''}`;
+                                totalPriceElement.textContent = `£${totalPrice}`;
+
+                                // enable button if more than 0 nights
+                                bookButton.disabled = (diffDays === 0);
+                            } else {
+                                // reset if only 1 date is selceted
+                                totalNightsElement.textContent = "Select dates";
+                                totalPriceElement.textContent = "£0";
+                                bookButton.disabled = true;
+                            }
+                        }
                     });
                 });
             </script>
