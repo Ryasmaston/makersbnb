@@ -36,16 +36,17 @@ def apply_login_route(app):
         session.pop('email', None)
         return redirect(url_for('login'))
 
-    @app.route('/sessions/new', methods=['GET', 'POST'])
+    @app.route('/register', methods=['GET', 'POST'])
     def register():
         connection = get_flask_database_connection(app)
         repository = UserRepository(connection)
-        if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
-            username = request.form['username']
+        if request.method == 'POST' and 'name' in request.form and 'password' in request.form and 'email' in request.form:
+            name = request.form['name']
             password = request.form['password']
             email = request.form['email']
 
+            user = User(None, name, email, password)
+            repository.create(user)
+            return redirect(url_for('login'))
 
-        user = User(None, username, email, password)
-        repository.create(user)
-        return redirect("login")
+        return render_template('register.html')
