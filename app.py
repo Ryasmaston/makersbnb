@@ -44,6 +44,11 @@ def get_index():
 def get_login_page():
     pass
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error_page.html', error=error), 404
+
+
 from routes.login_routes import apply_login_route
 apply_login_route(app)
 # These lines start the server if you run this file directly
