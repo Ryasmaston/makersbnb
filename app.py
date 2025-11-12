@@ -37,9 +37,18 @@ def get_index():
 # def get_login_page():
 #     pass
 
+<<<<<<< HEAD
 # @app.route('/requests/<id>', methods=['GET'])
 # def get_login_page():
 #     pass
+=======
+@app.route('/requests/<id>', methods=['GET'])
+def get_login_page():
+    pass
+
+from routes.login_routes import apply_login_route
+apply_login_route(app)
+>>>>>>> cda7bd5d820dfb3a612f3edae15ca4e64140df92
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
 # if started in test mode.

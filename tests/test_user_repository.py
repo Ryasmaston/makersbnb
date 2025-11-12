@@ -65,3 +65,9 @@ def test_get_users_listings(db_connection):
         Listing(1, 'Cozy Cabin in the Woods', 'A small rustic cabin with beautiful forest views.', 120, date(2025, 1, 1), date(2025, 12, 31), 1),
         Listing(3, 'Beachside Bungalow', 'Steps away from the ocean with amazing sunsets.', 180, date(2025, 3, 15), date(2025, 11, 15), 1)
     ]
+
+def test_login_user(db_connection):
+    db_connection.seed("seeds/makersbnb.sql")
+    repository = UserRepository(db_connection)
+    user = repository.login('Alice Johnson', 'password123')
+    assert user == User(1, 'Alice Johnson', 'alice@example.com', 'password123')
