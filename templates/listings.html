@@ -1,15 +1,3 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Listings | MakersBnB</title>
-        <link
-            rel="stylesheet"
-            href="{{ url_for('static', filename='css/style.css') }}"
-        />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    </head>
     {% extends "base.html" %} {% block title %}Listings | MakersBnB{% endblock
     %} {% block content %}
     <div class="flex items-center justify-center h-[calc(100vh-76px)]">
@@ -112,17 +100,18 @@
 
                 <dialog
                     id="listing-{{listing.id}}-dialog"
-                    class="dialog w-full max-h-[612px]"
+                    class="dialog"
                     aria-labelledby="listing-{{listing.id}}-title"
                     aria-describedby="listing-{{listing.id}}-description"
                     onclick="if (event.target === this) this.close()"
                 >
-                    <div class="p-0">
-                        <header class="p-8 pb-2">
+                    <div class="p-0 dialog-panel">
+                        <header class="p-8 pb-2 max-w-full">
                             <h2 id="listing-{{listing.id}}-title">
                                 {{listing.title}}
                             </h2>
-                            <p id="listing-{{listing.id}}-description">
+                            <p class="break-words
+                                " id="listing-{{listing.id}}-description">
                                 {{listing.description}}
                             </p>
                             <div class="flex items-center gap-2 pt-2">
@@ -208,23 +197,20 @@
                             src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75"
                         />
 
-                        <footer class="pb-12">
+                        <footer class="flex flex-row justify-between mt-2 pb-8 px-8">
                             <form>
-                                <input type="date-local" placeholder="Select date and time" />
+                                <input class="input" type="date-local"  placeholder="" />
                             </form>
 
-                            <button
-                                class="btn-outline"
-                                onclick="this.closest('dialog').close()"
-                            >
-                                Cancel
-                            </button>
+                            <div class="ml-5 flex w-full flex-col justify-between">
+                            <p>Total: ...</p>
                             <button
                                 class="btn"
                                 onclick="this.closest('dialog').close()"
                             >
-                                Save changes
+                                Book
                             </button>
+                            </div>
                         </footer>
 
                         <button
