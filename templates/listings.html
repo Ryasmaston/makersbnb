@@ -8,6 +8,7 @@
             rel="stylesheet"
             href="{{ url_for('static', filename='css/style.css') }}"
         />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     </head>
     {% extends "base.html" %} {% block title %}Listings | MakersBnB{% endblock
     %} {% block content %}
@@ -111,7 +112,7 @@
 
                 <dialog
                     id="listing-{{listing.id}}-dialog"
-                    class="dialog w-full sm:max-w-[425px] max-h-[612px]"
+                    class="dialog w-full max-h-[612px]"
                     aria-labelledby="listing-{{listing.id}}-title"
                     aria-describedby="listing-{{listing.id}}-description"
                     onclick="if (event.target === this) this.close()"
@@ -208,6 +209,10 @@
                         />
 
                         <footer class="pb-12">
+                            <form>
+                                <input type="date-local" placeholder="Select date and time" />
+                            </form>
+
                             <button
                                 class="btn-outline"
                                 onclick="this.closest('dialog').close()"
@@ -249,5 +254,21 @@
             </section>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            flatpickr("input[type=date-local]", {
+            // Selects a range of dates
+            mode: "range",
+            inline: true,
+
+            // Other settings
+            dateFormat: "Y-m-d",
+            });
+        });
+    </script>
+
     {% endblock %}
 </html>
