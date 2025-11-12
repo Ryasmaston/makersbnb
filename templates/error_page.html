@@ -1,0 +1,11 @@
+{% extends "base.html" %} {% block title %}Home | MakersBnB{% endblock %} {%
+block content %}
+<div class="flex items-center justify-center h-[calc(100vh-76px)]">
+    <div class="flex flex-col items-center translate-y-[calc(-76px/2)]">
+        <h2 class="text-5xl font-bold text-center mt-10">
+            Error: {{ error.code }}
+        </h2>
+        <p class="text-center mt-4 text-xl">{{ error.description }}</p>
+    </div>
+</div>
+{% endblock %}

@@ -28,7 +28,6 @@ class UserRepository:
         user.id = row['id']
         return user
 
-
     def delete(self, user_id):
         self._connection.execute('DELETE FROM users WHERE id = %s', [user_id])
         return None
@@ -52,3 +51,12 @@ class UserRepository:
             item = Listing(row["id"], row["title"], row["description"], row["price_per_night"], row["start_available_date"], row["end_available_date"], row["host_id"])
             listings.append(item)
         return listings
+
+    def login(self, email, password):
+        rows = self._connection.execute(
+            'SELECT * FROM users WHERE email = %s AND password = %s', [email, password]
+        )
+        if rows:
+            row = rows[0]
+            return User(row['id'], row['name'], row['email'], row['password'])
+        return None

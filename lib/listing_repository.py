@@ -28,7 +28,7 @@ class ListingRepository:
         return None
 
     def update(self, listing):
-        self._connection.execute('UPDATE listings SET title = %s, description = %s, price_per_night = %s, start_date = %s, end_date = %s host_id = %s,  WHERE id = %s', [listing.title, listing.description, listing.price, listing.start_available_date, listing.end_available_date, listing.host_id, listing.id])
+        self._connection.execute('UPDATE listings SET title = %s, description = %s, price_per_night = %s, start_date = %s, end_date = %s host_id = %s,  WHERE id = %s', [listing.title, listing.description, listing.price_per_night, listing.start_available_date, listing.end_available_date, listing.host_id, listing.id])
 
     # Delete an listing by their id
     def delete(self, listing_id):

@@ -1,9 +1,11 @@
 import os
 from flask import Flask, request, render_template, session
 from lib.database_connection import get_flask_database_connection
+from lib.listing_repository import ListingRepository
 
 # Create a new Flask app
 app = Flask(__name__)
+app.secret_key = 'makersbnb_secret_key'
 
 # == Your Routes Here ==
 
@@ -11,7 +13,7 @@ app = Flask(__name__)
 # Returns the homepage
 # Try it:
 #   ; open http://localhost:5001/index
-@app.route('/index', methods=['GET'])
+@app.route('/', methods=['GET'])
 def get_index():
     return render_template('index.html')
 
@@ -20,9 +22,11 @@ def get_index():
 # def get_login_page():
 #     pass
 
-# @app.route('/listings', methods=['GET'])
-# def get_login_page():
-#     pass
+@app.route('/listings', methods=['GET'])
+def get_listings():
+    listing_repo = ListingRepository(get_flask_database_connection(app))
+    listings = listing_repo.all()
+    return render_template('listings.html', user=session, listings=listings)
 
 # @app.route('/listings/new', methods=['POST'])
 # def get_login_page():
@@ -40,6 +44,17 @@ def get_index():
 # @app.route('/requests/<id>', methods=['GET'])
 # def get_login_page():
 #     pass
+@app.route('/requests/<id>', methods=['GET'])
+def get_login_page():
+    pass
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error_page.html', error=error), 404
+
+
+from routes.login_routes import apply_login_route
+apply_login_route(app)
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
 # if started in test mode.
