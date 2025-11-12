@@ -31,8 +31,12 @@
             </div>
             <div id="header-session-controls" class="flex gap-4 mx-10">
                 <!-- TODO: Conditional logic for signed in user-->
-                <a href="/">Sign In</a>
-                <a href="/">Log Out</a>
+                <a class="underline-offset-4 hover:underline" href="/"
+                    >Sign In</a
+                >
+                <a class="underline-offset-4 hover:underline" href="/"
+                    >Log Out</a
+                >
             </div>
         </section>
         <main>{% block content %} {% endblock %}</main>
