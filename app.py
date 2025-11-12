@@ -11,10 +11,9 @@ app = Flask(__name__)
 # Returns the homepage
 # Try it:
 #   ; open http://localhost:5001/index
-@app.route('/index', methods=['GET'])
+@app.route('/', methods=['GET'])
 def get_index():
-    message = "Hello, this is passed into the base"
-    return render_template('index.html', message=message)
+    return render_template('index.html')
 
 
 # @app.route('/sessions/new', methods=['GET'])
