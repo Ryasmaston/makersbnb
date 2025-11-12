@@ -21,7 +21,7 @@
 }
 
 /* Weekday headers */
-span.flatpickr-weekday {
+x span.flatpickr-weekday {
     color: #1f2937 !important;
     font-weight: 600 !important;
 }
@@ -31,7 +31,6 @@ span.flatpickr-weekday {
     color: #1f2937 !important;
 }
 
-/* Selected dates (start and end of range) - BLACK */
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
 .flatpickr-day.endRange,
@@ -53,9 +52,30 @@ span.flatpickr-weekday {
     background: #000000 !important;
     color: #ffffff !important;
     border-color: #000000 !important;
+    /* CRITICAL FIX: Ensures single selected dates are rounded */
+    border-radius: 50% !important;
 }
 
-/* Days in range and hover states - GREY */
+.flatpickr-day.startRange:not(.endRange),
+.flatpickr-day.startRange:not(.endRange):hover {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.flatpickr-day.endRange:not(.startRange),
+.flatpickr-day.endRange:not(.startRange):hover {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.flatpickr-day.startRange + .flatpickr-day.endRange {
+    box-shadow: none !important;
+}
+
+.flatpickr-day.startRange.endRange {
+    border-radius: 50% !important;
+}
+
 .flatpickr-day.inRange,
 .flatpickr-day.prevMonthDay.inRange,
 .flatpickr-day.nextMonthDay.inRange,
@@ -75,19 +95,27 @@ span.flatpickr-weekday {
     color: #1f2937 !important;
 }
 
-/* Today's date - BLACK OUTLINE */
 .flatpickr-day.today {
     border-color: #000000 !important;
     font-weight: 600 !important;
 }
+.flatpickr-day.today.selected.startRange,
+.flatpickr-day.today.selected.endRange {
+    border-color: #000000 !important;
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+.flatpickr-day.today.inRange {
+    border-color: #e5e7eb !important;
+    background: #e5e7eb !important;
+    color: #1f2937 !important;
+}
 
-/* Remove box shadow and outline from number inputs */
 .numInput {
     box-shadow: none !important;
     outline: none !important;
 }
 
-/* Remove background on number input hover */
 .numInputWrapper:hover {
     background: transparent !important;
 }
@@ -97,18 +125,15 @@ span.flatpickr-weekday {
     background: transparent !important;
 }
 
-/* Hide arrow buttons on year input */
 .numInputWrapper span.arrowUp,
 .numInputWrapper span.arrowDown {
     display: none !important;
 }
 
-/* Make year input non-editable appearance */
 .flatpickr-current-month input.cur-year {
     cursor: default !important;
 }
 
-/* Remove hover background on month name */
 .flatpickr-current-month span.cur-month:hover {
     background: transparent !important;
 }
