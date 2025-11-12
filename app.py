@@ -4,6 +4,7 @@ from lib.database_connection import get_flask_database_connection
 
 # Create a new Flask app
 app = Flask(__name__)
+app.secret_key = 'makersbnb_secret_key'
 
 # == Your Routes Here ==
 
@@ -20,9 +21,9 @@ def get_index():
 # def get_login_page():
 #     pass
 
-# @app.route('/listings', methods=['GET'])
-# def get_login_page():
-#     pass
+@app.route('/listings', methods=['GET'])
+def get_listings():
+    return render_template('listings.html', user=session)
 
 # @app.route('/listings/new', methods=['POST'])
 # def get_login_page():

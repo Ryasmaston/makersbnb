@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listings | MakersBnB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    {% extends "base.html" %} {% block title %}Listings | MakersBnB{% endblock %} {%
+    block content %}
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-4xl font-bold">Welcome, {{ session.name }}!</h1>
+                <p class="text-lg mt-2">Explore amazing places to stay</p>
+            </div>
+            <div class="flex gap-4">
+                <a href="/logout" class="btn-outline">Logout</a>
+            </div>
+        </div>
+
+        <div class="grid gap-6">
+            <div class="card">
+                <header></header>
+                    <h2>Your Listings</h2>
+                </header>
+                <section>
+                    <p></section>This is where</p> your listings will appear. Coming soon!</p>
+                </section>
+            </div>
+
+            <div class="card">
+                <header>
+                    <h2>Available Listings</h2>
+                </header>
+                <section>
+                    <p>Browse all available properties. Coming soon!</p>
+                </section>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
