@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %}Listings | MakersBnB{% endblock %} {%
 block content %}
-<div class="flex items-center justify-center h-[calc(100vh-76px)]">
-    <div class="flex flex-col items-center translate-y-[calc(-76px/2)]">
+<div class="flex items-center justify-center py-10 px-4">
+    <div class="flex flex-col items-center w-full max-w-6xl">
         <div class="mb-5 flex flex-col align-center">
             <h2 class="text-5xl font-bold text-center">Listings</h2>
 
@@ -116,7 +116,7 @@ block content %}
             {% endif %}
         </div>
 
-        <section class="grid grid-cols-3 gap-4">
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {% for listing in listings %}
             <div
                 class="card w-85 h-min flex flex-col justify-end shadow-2xl rounded-2xl cursor-pointer transition-transform transition-shadow duration-[220ms] ease-[cubic-bezier(.22,.94,.16,1)] will-change-[transform,box-shadow] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(75,75,75,0.32)]"
