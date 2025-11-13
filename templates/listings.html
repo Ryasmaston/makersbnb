@@ -265,16 +265,22 @@ block content %}
                     const pricePerNight = {{listing.price_per_night}};
                     const listingId = {{listing.id}};
 
+                    //get confirmed and booked dates then format as ranges
+                    // | tojson is a Jinja method to converyt python to json
+                    const confirmedDates = {{ confirmed_dates[listing.id] | tojson }};
+                    const disabledRanges = confirmedDates.map(booking => ({
+                        from: booking.start_date,
+                        to: booking.end_date
+                    }));
+                    console.log("Disabled ranges for listing " + listingId + ":", disabledRanges);
+
                     const fpInstance = flatpickr("#date-picker-" + listingId, {
                         mode: "range",
                         inline: true,
                         dateFormat: "Y-m-d",
-                        enable: [
-                            {
-                                from: "{{listing.start_available_date}}",
-                                to: "{{listing.end_available_date}}",
-                            },
-                        ],
+                        minDate: "{{listing.start_available_date}}",
+                        maxDate: "{{listing.end_available_date}}",
+                        disable: disabledRanges,
                         onChange: function(selectedDates, dateStr, instance) {
                             const totalNightsElement = document.getElementById("total-nights-" + listingId);
                             const totalPriceElement = document.getElementById("total-price-" + listingId);
@@ -309,7 +315,6 @@ block content %}
                     // this resets the date selection when we close the dialog
                     const dialog = document.getElementById("listing-" + listingId + "-dialog");
                     dialog.addEventListener("close", () => {
-                        console.log("Dialog closed, resetting dates for listing " + listingId);
                         // clear dates array
                         fpInstance.setDate([], false);
                         document.getElementById("total-nights-" + listingId).textContent = "Select dates";
