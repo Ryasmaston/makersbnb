@@ -66,3 +66,13 @@ def test_approve_booking(db_connection):
 
     updated_again = repo.approve_booking (2)
     assert updated_again is False
+
+def test_get_confirmed_booking_dates_for_listing(db_connection):
+    db_connection.seed("seeds/makersbnb.sql")
+    repo = BookingRepository(db_connection)
+
+    confirmed_dates = repo.get_confirmed_booking_dates_for_listing(1)
+
+    assert confirmed_dates == [
+        {"start_date": "2025-04-01", "end_date": "2025-04-05"}
+    ]

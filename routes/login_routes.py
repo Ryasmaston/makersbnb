@@ -47,6 +47,13 @@ def apply_login_route(app):
 
             user = User(None, name, email, password)
             repository.create(user)
-            return redirect(url_for('login'))
+            user = repository.login(email, password)
+            if user:
+                session['loggedin'] = True
+                session['user_id'] = user.id
+                session['name'] = user.name
+                session['email'] = user.email
+                return redirect(url_for('get_listings'))
+            return redirect(url_for('listings'))
 
         return render_template('register.html')

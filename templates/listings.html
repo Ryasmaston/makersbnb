@@ -1,91 +1,452 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listings | MakersBnB</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-    {% extends "base.html" %} {% block title %}Listings | MakersBnB{% endblock %} {%
-    block content %}
-        <div class="flex items-center justify-center h-[calc(100vh-76px)]">
-        <div class="flex flex-col items-center translate-y-[calc(-76px/2)]">
-            <h2 class="text-5xl font-bold text-center mb-20">Listings</h2>
-            <section class="grid grid-cols-3 gap-4">
-                {% for listing in listings %}
-                    <div class="card w-85 h-min flex flex-col justify-end shadow-2xl rounded-2xl cursor-pointer transition-transform transition-shadow duration-[220ms] ease-[cubic-bezier(.22,.94,.16,1)] will-change-[transform,box-shadow] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(75,75,75,0.32)]" id="{{listing.id}}" onclick="document.getElementById('listing-{{listing.id}}-dialog').showModal()">
-                        <header>
-                            <h3 class="truncate">{{listing.title}}</h3>
-                            <p class="truncate">{{listing.description}}</p>
-                        </header>
-                            <section class="px-0">
-                                <img
-                                alt="MakersBNB listing image"
-                                loading="lazy"
-                                width="200"
-                                height="200"
-                                class="w-85 object-fill" style="color:transparent"
-                                srcset="
-                                    https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=640&q=75 1x,
-                                    https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75 2x
-                                "
-                                src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75"
+{% extends "base.html" %} {% block title %}Listings | MakersBnB{% endblock %} {%
+block content %}
+<div class="flex items-center justify-center h-[calc(100vh-76px)]">
+    <div class="flex flex-col items-center translate-y-[calc(-76px/2)]">
+        <div class="mb-5 flex flex-col align-center">
+            <h2 class="text-5xl font-bold text-center">Listings</h2>
+
+            {% if user %}
+            <button
+                type="button"
+                onclick="document.getElementById('create-listing-dialog').showModal()"
+                class="btn-outline mt-6 mb-4"
+            >
+                Create Listing
+            </button>
+
+            <dialog
+                id="create-listing-dialog"
+                class="dialog w-full sm:max-w-[425px] max-h-[612px]"
+                aria-labelledby="create-listing-dialog-title"
+                aria-describedby="create-listing-dialog-description"
+                onclick="if (event.target === this) this.close()"
+            >
+                <div>
+                    <header>
+                        <h2 id="create-listing-dialog-header">
+                            Create Listing
+                        </h2>
+                    </header>
+
+                    <section>
+                        <form class="form grid gap-4">
+                            <div class="grid gap-3">
+                                <label for="create-listing-dialog-form-title"
+                                    >Title</label
+                                >
+                                <input
+                                    type="text"
+                                    value=""
+                                    id="create-listing-dialog-form-title"
+                                    autofocus
                                 />
-                            </section>
-                            <footer class="flex items-center gap-2">
-                                <span class="badge-outline">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16" /><path d="M2 8h18a2 2 0 0 1 2 2v10" /><path d="M2 17h20" /><path d="M6 8v9" /></svg>
-                                    1
-                                </span>
-                                <span class="badge-outline">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4 8 6" /><path d="M17 19v2" /><path d="M2 12h20" /><path d="M7 19v2" /><path d="M9 5 7.621 3.621A2.121 2.121 0 0 0 4 5v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" /></svg>
-                                    2
-                                </span>
-                                <span class="badge-outline">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 8 6-3-6-3v10" /><path d="m8 11.99-5.5 3.14a1 1 0 0 0 0 1.74l8.5 4.86a2 2 0 0 0 2 0l8.5-4.86a1 1 0 0 0 0-1.74L16 12" /><path d="m6.49 12.85 11.02 6.3" /><path d="M17.51 12.85 6.5 19.15" /></svg>
-                                    350m²
-                                </span>
-                                <span class="ml-auto font-medium tabular-nums">
-                                    £{{listing.price_per_night}} / night
-                                </span>
-                            </footer>
-                        </div>
-
-                            <dialog id="listing-{{listing.id}}-dialog" class="dialog w-full sm:max-w-[425px] max-h-[612px]" aria-labelledby="listing-{{listing.id}}-title" aria-describedby="listing-{{listing.id}}-description" onclick="if (event.target === this) this.close()">
-                            <div>
-                                <header>
-                                <h2 id="listing-{{listing.id}}-title">{{listing.title}}</h2>
-                                <p id="listing-{{listing.id}}-description">{{listing.description}}</p>
-                                </header>
-
-                                <section>
-                                <form class="form grid gap-4">
-                                    <div class="grid gap-3">
-                                    <label for="demo-dialog-edit-profile-name">Name</label>
-                                    <input type="text" value="Pedro Duarte" id="demo-dialog-edit-profile-name" autofocus />
-                                    </div>
-                                    <div class="grid gap-3">
-                                    <label for="demo-dialog-edit-profile-username">Username</label>
-                                    <input type="text" value="@peduarte" id="demo-dialog-edit-profile-username" />
-                                    </div>
-                                </form>
-                                </section>
-
-                                <footer>
-                                <button class="btn-outline" onclick="this.closest('dialog').close()">Cancel</button>
-                                <button class="btn" onclick="this.closest('dialog').close()">Save changes</button>
-                                </footer>
-
-                                <button type="button" aria-label="Close dialog" onclick="this.closest('dialog').close()">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
-                                    <path d="M18 6 6 18" />
-                                    <path d="m6 6 12 12" />
-                                </svg>
-                                </button>
                             </div>
-                            </dialog>
-                {% endfor %}
-            </section>
+                            <div class="grid gap-3">
+                                <label for="create-listing-dialog-form-desc"
+                                    >Description</label
+                                >
+                                <textarea
+                                    class="textarea"
+                                    placeholder=""
+                                    value=""
+                                    id="create-listing-dialog-form-desc"
+                                ></textarea>
+                            </div>
+                            <div class="grid gap-3">
+                                <label for="create-listing-dialog-form-price"
+                                    >Price per night (£)</label
+                                >
+                                <input
+                                    type="number"
+                                    value=""
+                                    id="create-listing-dialog-form-price"
+                                    min="0"
+                                    step="1"
+                                />
+                            </div>
+                            <div class="grid gap-3">
+                                <label for="create-listing-date-picker"
+                                    >Select Available dates</label
+                                >
+                                <input
+                                    type="text"
+                                    id="create-listing-date-picker"
+                                    placeholder="Select date range"
+                                    readonly
+                                />
+                            </div>
+                        </form>
+                    </section>
+
+                    <footer>
+                        <button
+                            class="btn"
+                            onclick="this.closest('dialog').close()"
+                        >
+                            Create
+                        </button>
+                    </footer>
+
+                    <button
+                        type="button"
+                        aria-label="Close dialog"
+                        onclick="this.closest('dialog').close()"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-x-icon lucide-x"
+                        >
+                            <path d="M18 6 6 18" />
+                            <path d="m6 6 12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </dialog>
+            {% endif %}
         </div>
+
+        <section class="grid grid-cols-3 gap-4">
+            {% for listing in listings %}
+            <div
+                class="card w-85 h-min flex flex-col justify-end shadow-2xl rounded-2xl cursor-pointer transition-transform transition-shadow duration-[220ms] ease-[cubic-bezier(.22,.94,.16,1)] will-change-[transform,box-shadow] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(75,75,75,0.32)]"
+                id="{{listing.id}}"
+                onclick="document.getElementById('listing-{{listing.id}}-dialog').showModal()"
+            >
+                <header>
+                    <h3 class="truncate">{{listing.title}}</h3>
+                    <p class="truncate">{{listing.description}}</p>
+                </header>
+                <section class="px-0">
+                    <img
+                        alt="MakersBNB listing image"
+                        loading="lazy"
+                        width="200"
+                        height="200"
+                        class="w-85 object-fill"
+                        style="color: transparent"
+                        srcset="
+                            https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=640&q=75  1x,
+                            https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75 2x
+                        "
+                        src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75"
+                    />
+                </section>
+                <footer class="flex items-center gap-2">
+                    <span class="badge-outline">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M2 4v16" />
+                            <path d="M2 8h18a2 2 0 0 1 2 2v10" />
+                            <path d="M2 17h20" />
+                            <path d="M6 8v9" />
+                        </svg>
+                        1
+                    </span>
+                    <span class="badge-outline">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M10 4 8 6" />
+                            <path d="M17 19v2" />
+                            <path d="M2 12h20" />
+                            <path d="M7 19v2" />
+                            <path
+                                d="M9 5 7.621 3.621A2.121 2.121 0 0 0 4 5v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
+                            />
+                        </svg>
+                        2
+                    </span>
+                    <span class="badge-outline">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="m12 8 6-3-6-3v10" />
+                            <path
+                                d="m8 11.99-5.5 3.14a1 1 0 0 0 0 1.74l8.5 4.86a2 2 0 0 0 2 0l8.5-4.86a1 1 0 0 0 0-1.74L16 12"
+                            />
+                            <path d="m6.49 12.85 11.02 6.3" />
+                            <path d="M17.51 12.85 6.5 19.15" />
+                        </svg>
+                        350m²
+                    </span>
+                    <span class="ml-auto font-medium tabular-nums">
+                        £{{listing.price_per_night}} / night
+                    </span>
+                </footer>
+            </div>
+
+            <dialog
+                id="listing-{{listing.id}}-dialog"
+                class="dialog"
+                aria-labelledby="listing-{{listing.id}}-title"
+                aria-describedby="listing-{{listing.id}}-description"
+                onclick="if (event.target === this) this.close()"
+            >
+                <div class="p-0 dialog-panel overflow-y-auto scrollbar">
+                    <header class="p-8 pb-2 max-w-full">
+                        <h2 id="listing-{{listing.id}}-title">
+                            {{listing.title}}
+                        </h2>
+                        <p
+                            class="break-words"
+                            id="listing-{{listing.id}}-description"
+                        >
+                            {{listing.description}}
+                        </p>
+                        <div class="flex items-center gap-2 pt-2">
+                            <span class="badge-outline">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="M2 4v16" />
+                                    <path d="M2 8h18a2 2 0 0 1 2 2v10" />
+                                    <path d="M2 17h20" />
+                                    <path d="M6 8v9" />
+                                </svg>
+                                1
+                            </span>
+                            <span class="badge-outline">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="M10 4 8 6" />
+                                    <path d="M17 19v2" />
+                                    <path d="M2 12h20" />
+                                    <path d="M7 19v2" />
+                                    <path
+                                        d="M9 5 7.621 3.621A2.121 2.121 0 0 0 4 5v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
+                                    />
+                                </svg>
+                                2
+                            </span>
+                            <span class="badge-outline">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="m12 8 6-3-6-3v10" />
+                                    <path
+                                        d="m8 11.99-5.5 3.14a1 1 0 0 0 0 1.74l8.5 4.86a2 2 0 0 0 2 0l8.5-4.86a1 1 0 0 0 0-1.74L16 12"
+                                    />
+                                    <path d="m6.49 12.85 11.02 6.3" />
+                                    <path d="M17.51 12.85 6.5 19.15" />
+                                </svg>
+                                350m²
+                            </span>
+                            <span class="ml-auto font-medium tabular-nums">
+                                £{{listing.price_per_night}} / night
+                            </span>
+                        </div>
+                    </header>
+
+                    <!--<img
+                        alt="MakersBNB listing image"
+                        loading="lazy"
+                        width="min-w-full"
+                        height="200"
+                        class="object-cover"
+                        style="color: transparent"
+                        srcset="
+                            https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=640&q=75  1x,
+                            https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75 2x
+                        "
+                        src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75"
+                    />-->
+
+                    <footer
+                        class="flex flex-row justify-between mt-2 pb-8 px-8"
+                    >
+                        <form>
+                            <input
+                                class="input"
+                                type="date-local"
+                                id="date-picker-{{listing.id}}"
+                                placeholder=""
+                            />
+                        </form>
+
+                        <div class="ml-5 flex w-full flex-col justify-end">
+                            <div class="mb-2" style="min-height: 3rem">
+                                <p
+                                    id="total-nights-{{listing.id}}"
+                                    class="text-m text-gray-600"
+                                >
+                                    Select dates
+                                </p>
+                                <p
+                                    id="total-price-{{listing.id}}"
+                                    class="font-semibold text-xl"
+                                >
+                                    £0
+                                </p>
+                            </div>
+                            <button
+                                class="btn"
+                                id="book-btn-{{listing.id}}"
+                                disabled
+                            >
+                                Book
+                            </button>
+                        </div>
+                    </footer>
+
+                    <button
+                        type="button"
+                        aria-label="Close dialog"
+                        onclick="this.closest('dialog').close()"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-x-icon lucide-x"
+                        >
+                            <path d="M18 6 6 18" />
+                            <path d="m6 6 12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </dialog>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const pricePerNight = {{listing.price_per_night}};
+                    const listingId = {{listing.id}};
+
+                    //get confirmed and booked dates then format as ranges
+                    // | tojson is a Jinja method to converyt python to json
+                    const confirmedDates = {{ confirmed_dates[listing.id] | tojson }};
+                    const disabledRanges = confirmedDates.map(booking => ({
+                        from: booking.start_date,
+                        to: booking.end_date
+                    }));
+                    console.log("Disabled ranges for listing " + listingId + ":", disabledRanges);
+
+                    const fpInstance = flatpickr("#date-picker-" + listingId, {
+                        mode: "range",
+                        inline: true,
+                        dateFormat: "Y-m-d",
+                        minDate: "{{listing.start_available_date}}",
+                        maxDate: "{{listing.end_available_date}}",
+                        disable: disabledRanges,
+                        onChange: function(selectedDates, dateStr, instance) {
+                            const totalNightsElement = document.getElementById("total-nights-" + listingId);
+                            const totalPriceElement = document.getElementById("total-price-" + listingId);
+                            const bookButton = document.getElementById("book-btn-" + listingId);
+
+                            if (selectedDates.length === 2) {
+                                const startDate = selectedDates[0];
+                                const endDate = selectedDates[1];
+
+                                // difference in days
+                                const diffTime = Math.abs(endDate - startDate);
+                                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                                // total price
+                                const totalPrice = diffDays * pricePerNight;
+
+                                // update the nights and total price html
+                                totalNightsElement.textContent = `${diffDays} night${diffDays !== 1 ? 's' : ''}`;
+                                totalPriceElement.textContent = `£${totalPrice}`;
+
+                                // enable button if more than 0 nights
+                                bookButton.disabled = (diffDays === 0);
+                            } else {
+                                // reset if only 1 date is selceted
+                                totalNightsElement.textContent = "Select dates";
+                                totalPriceElement.textContent = "£0";
+                                bookButton.disabled = true;
+                            }
+                        }
+                    });
+
+                    // this resets the date selection when we close the dialog
+                    const dialog = document.getElementById("listing-" + listingId + "-dialog");
+                    dialog.addEventListener("close", () => {
+                        // clear dates array
+                        fpInstance.setDate([], false);
+                        document.getElementById("total-nights-" + listingId).textContent = "Select dates";
+                        document.getElementById("total-price-" + listingId).textContent = "£0";
+                        document.getElementById("book-btn-" + listingId).disabled = true;
+                    });
+                });
+            </script>
+            {% endfor %}
+        </section>
     </div>
-    {% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    flatpickr("#create-listing-date-picker", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        inline: true,
+    });
+</script>
+
+{% endblock %}

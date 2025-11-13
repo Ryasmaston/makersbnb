@@ -11,6 +11,7 @@ block content %}
                 next stay.
             </p>
         </div>
+        {% if not user.loggedin %}
         <div class="card w-100 mt-16 shadow-2xl rounded-2xl">
             <header>
                 <h2>Login to your account</h2>
@@ -48,13 +49,16 @@ block content %}
                     </div>
                     <p class="text-center text-sm">
                         Don't have an account?
-                        <a href="#" class="underline-offset-4 hover:underline"
+                        <a
+                            href="/register"
+                            class="underline-offset-4 hover:underline"
                             >Sign up</a
                         >
                     </p>
                 </form>
             </section>
         </div>
+        {% endif %}
     </div>
 </div>
 

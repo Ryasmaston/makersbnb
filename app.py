@@ -2,6 +2,8 @@ import os
 from flask import Flask, request, render_template, session
 from lib.database_connection import get_flask_database_connection
 from lib.listing_repository import ListingRepository
+from lib.booking_repository import BookingRepository
+
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -15,7 +17,7 @@ app.secret_key = 'makersbnb_secret_key'
 #   ; open http://localhost:5001/index
 @app.route('/', methods=['GET'])
 def get_index():
-    return render_template('index.html')
+    return render_template('index.html', user=session)
 
 
 # @app.route('/sessions/new', methods=['GET'])
@@ -24,9 +26,17 @@ def get_index():
 
 @app.route('/listings', methods=['GET'])
 def get_listings():
-    listing_repo = ListingRepository(get_flask_database_connection(app))
+    connection = get_flask_database_connection(app)
+    listing_repo = ListingRepository(connection)
+    booking_repo = BookingRepository(connection)
     listings = listing_repo.all()
-    return render_template('listings.html', user=session, listings=listings)
+
+    # get confirmed dates per listing
+    confirmed_dates_by_listing = {}
+    for listing in listings:
+        confirmed_dates_by_listing[listing.id] = booking_repo.get_confirmed_booking_dates_for_listing(listing.id)
+
+    return render_template('listings.html', user=session, listings=listings, confirmed_dates=confirmed_dates_by_listing)
 
 # @app.route('/listings/new', methods=['POST'])
 # def get_login_page():
@@ -44,13 +54,11 @@ def get_listings():
 # @app.route('/requests/<id>', methods=['GET'])
 # def get_login_page():
 #     pass
-@app.route('/requests/<id>', methods=['GET'])
-def get_login_page():
-    pass
+
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('error_page.html', error=error), 404
+    return render_template('error_page.html', user=session, error=error), 404
 
 
 from routes.login_routes import apply_login_route
