@@ -45,9 +45,14 @@
                         class="h-10 w-auto mt-5"
                     /></div>
                     <nav class="flex flex-col p-4 space-y-2">
-                    <a href="/" class="px-4 py-2 rounded hover:bg-black hover:text-white mt-5">Home</a>
-                    <a href="/listings" class="px-4 py-2 rounded hover:bg-black hover:text-white">Listings</a>
-                    <a href="/settings" class="px-4 py-2 rounded hover:bg-black hover:text-white">Bookings</a>
+                    <a href="/" class="btn-ghost text-lg">Home</a>
+                    <a href="/listings" class="px-4 py-2 btn-ghost text-lg">Listings</a>
+                    <a href="/settings" class="px-4 py-2 btn-ghost text-lg">Bookings</a>
+                    {% if user %}
+                    <a href="/logout" class="px-4 py-2 btn-ghost text-lg">Sign out</a>
+                    {% else %}
+                    <a href="/" class="px-4 py-2 btn-ghost text-lg">Sign in</a>
+                    {% endif %}
                     </nav>
                 </aside>
             </div>
@@ -61,24 +66,6 @@
                     <h2 id="logo" class="text-3xl font-bold mx-2">MakersBnB</h2>
                 </div>
             </a>
-            <div id="header-session-controls" class="flex gap-4 mx-10">
-                <!-- TODO: Conditional logic for signed in user-->
-                {% if user %}
-                <a class="underline-offset-4 hover:underline" href="/listings"
-                    >Listings</a
-                >
-                <a class="underline-offset-4 hover:underline" href="/bookings"
-                    >Bookings</a
-                >
-                <a class="underline-offset-4 hover:underline" href="/logout"
-                    >Sign Out</a
-                >
-                {% else %}
-                <a class="underline-offset-4 hover:underline" href="/"
-                    >Sign In</a
-                >
-                {% endif %}
-            </div>
         </section>
         <div id="overlay" class="fixed inser-0 bg-black/40 opacity-0 pointer-events-none transition-opacity duration-300 z-30"></div>
         <main>{% block content %} {% endblock %}</main>
