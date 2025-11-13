@@ -1,7 +1,7 @@
 from lib.booking import Booking
 class BookingRepository:
     def __init__(self, connection):
-        self._connection = connection 
+        self._connection = connection
     def all(self):
         array = self._connection.execute('SELECT * FROM bookings')
         bookings = []
@@ -9,7 +9,7 @@ class BookingRepository:
             booking = Booking(item["id"], item["start_date"],item["end_date"], item["listing_id"], item["guest_id"],item["status"])
             bookings.append(booking)
         return bookings
-    
+
     def find(self, booking_id):
         rows = self._connection.execute(
             'SELECT * FROM bookings WHERE id = %s', [booking_id]
@@ -17,7 +17,7 @@ class BookingRepository:
 
         row = rows[0]
         return Booking(row["id"], row["start_date"],row["end_date"], row["listing_id"], row["guest_id"],row["status"])
-    
+
     def create(self, booking):
         rows = self._connection.execute(
             'INSERT INTO bookings (start_date, end_date, listing_id, guest_id, status) VALUES (%s, %s, %s, %s, %s) RETURNING id',
@@ -26,11 +26,11 @@ class BookingRepository:
         row = rows[0]
         booking.id = row["id"]
         return booking
-    
+
     def delete(self, booking_id):
         self._connection.execute('DELETE FROM bookings WHERE id = %s', [booking_id])
         return None
-    
+
     def total_price(self, booking_id):
         """
         total = (end_date - start_date in days) * listing.price_per_night
@@ -61,5 +61,46 @@ class BookingRepository:
         rows = self._connection.execute(sql, [booking_id])
         return bool(rows)
 
+    def deny_booking(self, booking_id):
+        """
+        Set booking from 'pending' -> 'denied'.
+        Returns True if updated, False otherwise.
+        """
+        sql = """
+        UPDATE bookings
+        SET status = 'denied'
+        WHERE id = %s AND status = 'pending'
+        RETURNING id;
+        """
+        rows = self._connection.execute(sql, [booking_id])
+        return bool(rows)
 
+    def cancel_booking(self, booking_id):
+        """
+        Set booking from 'pending' -> 'cancelled'.
+        Returns True if updated, False otherwise.
+        """
+        sql = """
+        UPDATE bookings
+        SET status = 'cancelled'
+        WHERE id = %s AND status = 'pending'
+        RETURNING id;
+        """
+        rows = self._connection.execute(sql, [booking_id])
+        return bool(rows)
 
+    def all_with_guest_id(self, guest_id):
+        sql = """
+        SELECT * FROM bookings WHERE guest_id = %s
+        """
+        rows = self._connection.execute(sql, [guest_id])
+        bookings = [Booking(row['id'], row['start_date'], row['end_date'], row['listing_id'], row['guest_id'], row['status']) for row in rows]
+        return bookings
+
+    def all_with_host_id(self, host_id):
+        sql = """
+        SELECT * FROM bookings JOIN listings ON listings.id = bookings.listing_id WHERE listings.host_id = %s
+        """
+        rows = self._connection.execute(sql, [host_id])
+        bookings = [Booking(row['id'], row['start_date'], row['end_date'], row['listing_id'], row['guest_id'], row['status']) for row in rows]
+        return bookings

@@ -1,5 +1,7 @@
 import os
 from flask import Flask, request, render_template, session
+from flask.helpers import get_flashed_messages
+from lib.booking_repository import BookingRepository
 from lib.database_connection import get_flask_database_connection
 from lib.listing_repository import ListingRepository
 
@@ -17,6 +19,7 @@ app.secret_key = 'makersbnb_secret_key'
 def get_index():
     return render_template('index.html')
 
+#   ; open http://localhost:5001/index
 
 # @app.route('/sessions/new', methods=['GET'])
 # def get_login_page():
@@ -27,6 +30,13 @@ def get_listings():
     listing_repo = ListingRepository(get_flask_database_connection(app))
     listings = listing_repo.all()
     return render_template('listings.html', user=session, listings=listings)
+
+@app.route('/bookings', methods=['GET'])
+def get_bookings():
+    booking_repo = BookingRepository(get_flask_database_connection(app))
+    outbound_bookings = booking_repo.all_with_guest_id(session['user_id'])
+    inbound_bookings = booking_repo.all_with_host_id(session['user_id'])
+    return render_template('bookings.html', outbound_bookings=outbound_bookings, inbound_bookings=inbound_bookings)
 
 # @app.route('/listings/new', methods=['POST'])
 # def get_login_page():
