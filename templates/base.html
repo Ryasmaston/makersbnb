@@ -45,12 +45,21 @@
             </a>
             <div id="header-session-controls" class="flex gap-4 mx-10">
                 <!-- TODO: Conditional logic for signed in user-->
+                {% if user %}
+                <a class="underline-offset-4 hover:underline" href="/listings"
+                    >Listings</a
+                >
+                <a class="underline-offset-4 hover:underline" href="/bookings"
+                    >Bookings</a
+                >
+                <a class="underline-offset-4 hover:underline" href="/logout"
+                    >Sign Out</a
+                >
+                {% else %}
                 <a class="underline-offset-4 hover:underline" href="/"
                     >Sign In</a
                 >
-                <a class="underline-offset-4 hover:underline" href="/"
-                    >Log Out</a
-                >
+                {% endif %}
             </div>
         </section>
         <main>{% block content %} {% endblock %}</main>

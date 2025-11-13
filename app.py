@@ -17,7 +17,7 @@ app.secret_key = 'makersbnb_secret_key'
 #   ; open http://localhost:5001/index
 @app.route('/', methods=['GET'])
 def get_index():
-    return render_template('index.html')
+    return render_template('index.html', user=session)
 
 
 # @app.route('/sessions/new', methods=['GET'])
@@ -54,13 +54,11 @@ def get_listings():
 # @app.route('/requests/<id>', methods=['GET'])
 # def get_login_page():
 #     pass
-@app.route('/requests/<id>', methods=['GET'])
-def get_login_page():
-    pass
+
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('error_page.html', error=error), 404
+    return render_template('error_page.html', user=session, error=error), 404
 
 
 from routes.login_routes import apply_login_route
