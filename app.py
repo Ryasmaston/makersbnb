@@ -1,8 +1,10 @@
 import os
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session, redirect, url_for
 from lib.database_connection import get_flask_database_connection
 from lib.listing_repository import ListingRepository
 from lib.booking_repository import BookingRepository
+from datetime import date
+from lib.listing import Listing
 
 
 # Create a new Flask app
@@ -37,6 +39,27 @@ def get_listings():
         confirmed_dates_by_listing[listing.id] = booking_repo.get_confirmed_booking_dates_for_listing(listing.id)
 
     return render_template('listings.html', user=session, listings=listings, confirmed_dates=confirmed_dates_by_listing)
+
+@app.route('/listings', methods=['POST'])
+def post_listings():
+    connection = get_flask_database_connection(app)
+    listing_repo = ListingRepository(connection)
+    print(request.form)
+    title = request.form['title']
+    description = request.form['description']
+    price_per_night = request.form['price_per_night']
+    host_id = session['user_id']
+    dates = request.form['available_date_range']
+    start_date_string = dates[0:10]
+    end_date_string = dates[14:24]
+    start_year, start_month, start_day = start_date_string.split('-')
+    end_year, end_month, end_day = end_date_string.split('-')
+    start_available_date = date(int(start_year), int(start_month), int(start_day))
+    end_available_date = date(int(end_year), int(end_month), int(end_day))
+
+    new_listing = Listing(None, title, description, price_per_night, start_available_date, end_available_date, host_id)
+    listing_repo.create(new_listing)
+    return redirect(url_for('get_listings'))
 
 # @app.route('/listings/new', methods=['POST'])
 # def get_login_page():

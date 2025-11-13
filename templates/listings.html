@@ -29,63 +29,66 @@ block content %}
                     </header>
 
                     <section>
-                        <form class="form grid gap-4">
+                        <form
+                            class="form grid gap-4"
+                            action="/listings"
+                            method="POST"
+                        >
                             <div class="grid gap-3">
-                                <label for="create-listing-dialog-form-title"
-                                    >Title</label
-                                >
+                                <label for="title">Title</label>
                                 <input
                                     type="text"
                                     value=""
-                                    id="create-listing-dialog-form-title"
+                                    id="title"
+                                    name="title"
                                     autofocus
                                 />
                             </div>
                             <div class="grid gap-3">
-                                <label for="create-listing-dialog-form-desc"
-                                    >Description</label
-                                >
+                                <label for="description">Description</label>
                                 <textarea
                                     class="textarea"
                                     placeholder=""
                                     value=""
-                                    id="create-listing-dialog-form-desc"
+                                    id="description"
+                                    name="description"
                                 ></textarea>
                             </div>
                             <div class="grid gap-3">
-                                <label for="create-listing-dialog-form-price"
+                                <label for="price_per_night"
                                     >Price per night (£)</label
                                 >
                                 <input
                                     type="number"
                                     value=""
-                                    id="create-listing-dialog-form-price"
+                                    id="price_per_night"
+                                    name="price_per_night"
                                     min="0"
                                     step="1"
                                 />
                             </div>
                             <div class="grid gap-3">
-                                <label for="create-listing-date-picker"
+                                <label for="available_date_range"
                                     >Select Available dates</label
                                 >
                                 <input
                                     type="text"
-                                    id="create-listing-date-picker"
+                                    id="available_date_range"
+                                    name="available_date_range"
                                     placeholder="Select date range"
                                     readonly
                                 />
                             </div>
+
+                            <button
+                                class="btn"
+                                onclick="this.closest('dialog').close()"
+                                type="submit"
+                            >
+                                Create
+                            </button>
                         </form>
                     </section>
-
-                    <footer>
-                        <button
-                            class="btn"
-                            onclick="this.closest('dialog').close()"
-                        >
-                            Create
-                        </button>
-                    </footer>
 
                     <button
                         type="button"
@@ -442,7 +445,7 @@ block content %}
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
-    flatpickr("#create-listing-date-picker", {
+    flatpickr("#available_date_range", {
         mode: "range",
         dateFormat: "Y-m-d",
         minDate: "today",
