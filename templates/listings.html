@@ -374,6 +374,7 @@ block content %}
                 document.addEventListener("DOMContentLoaded", () => {
                     const pricePerNight = {{listing.price_per_night}};
                     const listingId = {{listing.id}};
+                    const isLoggedIn = {{ 'true' if user.get('loggedin') else 'false' }};
 
                     //get confirmed and booked dates then format as ranges
                     // | tojson is a Jinja method to converyt python to json
@@ -412,7 +413,7 @@ block content %}
                                 totalPriceElement.textContent = `£${totalPrice}`;
 
                                 // enable button if more than 0 nights
-                                bookButton.disabled = (diffDays === 0);
+                                bookButton.disabled = (diffDays === 0) || !isLoggedIn;
                             } else {
                                 // reset if only 1 date is selceted
                                 totalNightsElement.textContent = "Select dates";
