@@ -24,13 +24,27 @@
             @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
         </style>
     </head>
-    <body>
-        <section
-            id="header"
-            class="flex flex-row p-3 justify-between items-center h-[76px] sticky top-0 z-50"
-        >
-            <a href="/">
-                <div class="flex items-center mx-6 my-2 cursor-pointer">
+    <body class="bg-gray-50 overflow-x-hidden">
+        <div class="hidden -translate-x-full translate-x-0"></div>
+        <section id="header" class="flex flex-row p-3 justify-between items-center h-[76px] sticky top-1 z-50 bg-white shadow-md">
+            <div class="group flex items-center relative">
+                <button id="menu-btn" class="flex flex-col justify-between w-8 h-6 ml-4 mr-2 focus:outline-none">
+                    <span class="block h-1 bg-gray-800 rounded"></span>
+                    <span class="block h-1 bg-gray-800 rounded"></span>
+                    <span class="block h-1 bg-gray-800 rounded"></span>
+                </button>
+                <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-gray-200 text-black transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 z-40">
+                    <div class="p-6 text-2xl font-semibold shadow-md">Menu</div>
+                    <nav class="flex flex-col p-4 space-y-2">
+                    <a href="/" class="px-4 py-2 rounded hover:bg-gray-700">Home</a>
+                    <a href="/listings" class="px-4 py-2 rounded hover:bg-gray-700">Listings</a>
+                    <a href="/settings" class="px-4 py-2 rounded hover:bg-gray-700">Bookings</a>
+                    <a href="/logout" class="px-4 py-2 rounded hover:bg-gray-700">Logout</a>
+                    </nav>
+                </aside>
+            </div>
+            <a href="/" class="absolute left-1/2 transform -translate-x-1/2">
+                <div class="flex items-center cursor-pointer">
                     <img
                         src="./static/assets/IMG_8796.jpg"
                         alt="MakersBnB Logo"
@@ -49,6 +63,7 @@
                 >
             </div>
         </section>
+        <div id="overlay" class="fixed inser-0 bg-black/40 opacity-0 pointer-events-none transition-opacity duration-300 z-30"></div>
         <main>{% block content %} {% endblock %}</main>
     </body>
 </html>
