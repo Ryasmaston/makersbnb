@@ -5,7 +5,7 @@ from flask.helpers import get_flashed_messages
 from lib.booking_repository import BookingRepository
 from lib.database_connection import get_flask_database_connection
 from lib.listing_repository import ListingRepository
-from lib.booking_repository import BookingRepository
+from lib.booking import Booking
 from datetime import date
 from lib.listing import Listing
 
@@ -70,25 +70,25 @@ def get_bookings():
     booking_repo = BookingRepository(get_flask_database_connection(app))
     outbound_bookings = booking_repo.all_with_guest_id(session['user_id'])
     inbound_bookings = booking_repo.all_with_host_id(session['user_id'])
-    return render_template('bookings.html', outbound_bookings=outbound_bookings, inbound_bookings=inbound_bookings)
+    return render_template('bookings.html', user=session, outbound_bookings=outbound_bookings, inbound_bookings=inbound_bookings)
 
-# @app.route('/listings/new', methods=['POST'])
-# def get_login_page():
-#     pass
-
-
-# @app.route('/listings/<id>', methods=['GET'])
-# def get_login_page():
-#     pass
-
-# @app.route('/requests', methods=['GET'])
-# def get_login_page():
-#     pass
-
-# @app.route('/requests/<id>', methods=['GET'])
-# def get_login_page():
-#     pass
-
+@app.route('/bookings/new', methods=['POST'])
+def post_bookings():
+    connection = get_flask_database_connection(app)
+    booking_repo = BookingRepository(connection)
+    status = 'pending'
+    guest_id = session['user_id']
+    listing_id = request.form['listing_id']
+    dates = request.form['dates_range']
+    start_date_string = dates[0:10]
+    end_date_string = dates[14:24]
+    start_year, start_month, start_day = start_date_string.split('-')
+    end_year, end_month, end_day = end_date_string.split('-')
+    start_date = date(int(start_year), int(start_month), int(start_day))
+    end_date = date(int(end_year), int(end_month), int(end_day))
+    new_booking = Booking(None, start_date, end_date, listing_id, guest_id, status)
+    booking_repo.create(new_booking)
+    return redirect(url_for('get_bookings'))
 
 @app.errorhandler(404)
 def page_not_found(error):

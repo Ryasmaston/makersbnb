@@ -315,38 +315,47 @@ block content %}
                     <footer
                         class="flex flex-row justify-between mt-2 pb-8 px-8"
                     >
-                        <form>
+                        <form action="/bookings/new" method="POST">
+                            <input
+                                class="input"
+                                type="hidden"
+                                name="listing_id"
+                                value="{{listing.id}}"
+                            />
                             <input
                                 class="input"
                                 type="date-local"
                                 id="date-picker-{{listing.id}}"
                                 placeholder=""
+                                name="dates_range"
                             />
-                        </form>
 
-                        <div class="ml-5 flex w-full flex-col justify-end">
-                            <div class="mb-2" style="min-height: 3rem">
-                                <p
-                                    id="total-nights-{{listing.id}}"
-                                    class="text-m text-gray-600"
+                            <div class="ml-5 flex w-full flex-col justify-end">
+                                <div class="mb-2" style="min-height: 3rem">
+                                    <p
+                                        id="total-nights-{{listing.id}}"
+                                        class="text-m text-gray-600"
+                                    >
+                                        Select dates
+                                    </p>
+                                    <p
+                                        id="total-price-{{listing.id}}"
+                                        class="font-semibold text-xl"
+                                    >
+                                        £0
+                                    </p>
+                                </div>
+                                <button
+                                    class="btn"
+                                    id="book-btn-{{listing.id}}"
+                                    action="/bookings/new"
+                                    disabled
+                                    type="submit"
                                 >
-                                    Select dates
-                                </p>
-                                <p
-                                    id="total-price-{{listing.id}}"
-                                    class="font-semibold text-xl"
-                                >
-                                    £0
-                                </p>
+                                    Book
+                                </button>
                             </div>
-                            <button
-                                class="btn"
-                                id="book-btn-{{listing.id}}"
-                                disabled
-                            >
-                                Book
-                            </button>
-                        </div>
+                        </form>
                     </footer>
 
                     <button
