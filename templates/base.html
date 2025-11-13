@@ -29,7 +29,7 @@
         />
         <link rel="stylesheet" href="/static/style.css" />
     </head>
-    <body class="bg-gray-50 overflow-x-hidden">
+    <body class="bg-gray-50 overflow-x-hidden {% block body_classes %}{% endblock %}">
         <div class="hidden -translate-x-full translate-x-0"></div>
         <section id="header" class="flex flex-row p-3 justify-between items-center h-[76px] sticky top-0 z-50 bg-white/100 shadow-md">
             <div class="group flex items-center relative">

@@ -20,8 +20,9 @@ block content %}
                 aria-labelledby="create-listing-dialog-title"
                 aria-describedby="create-listing-dialog-description"
                 onclick="if (event.target === this) this.close()"
+                scrol
             >
-                <div>
+                <div class="overflow-y-auto scrollbar">
                     <header>
                         <h2 id="create-listing-dialog-header">
                             Create Listing
@@ -334,7 +335,7 @@ block content %}
                                 <div class="mb-2" style="min-height: 3rem">
                                     <p
                                         id="total-nights-{{listing.id}}"
-                                        class="text-m text-gray-600"
+                                        class="text-m text-gray-600 mt-4"
                                     >
                                         Select dates
                                     </p>
