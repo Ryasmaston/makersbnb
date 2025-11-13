@@ -11,6 +11,7 @@ block content %}
                 next stay.
             </p>
         </div>
+        {% if not user.loggedin %}
         <div class="card w-100 mt-16 shadow-2xl rounded-2xl">
             <header>
                 <h2>Login to your account</h2>
@@ -41,28 +42,8 @@ block content %}
                         />
                     </div>
                     <div class="flex flex-col gap-2">
-                        <button
-                            type="submit"
-                            class="btn w-full"
-                            {%
-                            if
-                            user.loggedin
-                            %}disabled{%
-                            endif
-                            %}
-                        >
-                            Login
-                        </button>
-                        <button
-                            type="button"
-                            class="btn-outline w-full"
-                            {%
-                            if
-                            user.loggedin
-                            %}disabled{%
-                            endif
-                            %}
-                        >
+                        <button type="submit" class="btn w-full">Login</button>
+                        <button type="button" class="btn-outline w-full">
                             Login with Google
                         </button>
                     </div>
@@ -77,6 +58,7 @@ block content %}
                 </form>
             </section>
         </div>
+        {% endif %}
     </div>
 </div>
 
