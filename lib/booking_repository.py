@@ -74,3 +74,47 @@ class BookingRepository:
         """
         rows = self._connection.execute(sql, [listing_id])
         return [{"start_date": str(row["start_date"]), "end_date": str(row["end_date"])} for row in rows]
+      
+    def deny_booking(self, booking_id):
+        """
+        Set booking from 'pending' -> 'denied'.
+        Returns True if updated, False otherwise.
+        """
+        sql = """
+        UPDATE bookings
+        SET status = 'denied'
+        WHERE id = %s AND status = 'pending'
+        RETURNING id;
+        """
+        rows = self._connection.execute(sql, [booking_id])
+        return bool(rows)
+
+    def cancel_booking(self, booking_id):
+        """
+        Set booking from 'pending' -> 'cancelled'.
+        Returns True if updated, False otherwise.
+        """
+        sql = """
+        UPDATE bookings
+        SET status = 'cancelled'
+        WHERE id = %s AND status = 'pending'
+        RETURNING id;
+        """
+        rows = self._connection.execute(sql, [booking_id])
+        return bool(rows)
+
+    def all_with_guest_id(self, guest_id):
+        sql = """
+        SELECT * FROM bookings WHERE guest_id = %s
+        """
+        rows = self._connection.execute(sql, [guest_id])
+        bookings = [Booking(row['id'], row['start_date'], row['end_date'], row['listing_id'], row['guest_id'], row['status']) for row in rows]
+        return bookings
+
+    def all_with_host_id(self, host_id):
+        sql = """
+        SELECT * FROM bookings JOIN listings ON listings.id = bookings.listing_id WHERE listings.host_id = %s
+        """
+        rows = self._connection.execute(sql, [host_id])
+        bookings = [Booking(row['id'], row['start_date'], row['end_date'], row['listing_id'], row['guest_id'], row['status']) for row in rows]
+        return bookings
