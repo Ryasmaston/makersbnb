@@ -2,7 +2,117 @@
 block content %}
 <div class="flex items-center justify-center h-[calc(100vh-76px)]">
     <div class="flex flex-col items-center translate-y-[calc(-76px/2)]">
-        <h2 class="text-5xl font-bold text-center mb-20">Listings</h2>
+        <div class="mb-5 flex flex-col align-center">
+            <h2 class="text-5xl font-bold text-center">Listings</h2>
+
+            {% if user %}
+            <button
+                type="button"
+                onclick="document.getElementById('create-listing-dialog').showModal()"
+                class="btn-outline mt-6 mb-4"
+            >
+                Create Listing
+            </button>
+
+            <dialog
+                id="create-listing-dialog"
+                class="dialog w-full sm:max-w-[425px] max-h-[612px]"
+                aria-labelledby="create-listing-dialog-title"
+                aria-describedby="create-listing-dialog-description"
+                onclick="if (event.target === this) this.close()"
+            >
+                <div>
+                    <header>
+                        <h2 id="create-listing-dialog-header">
+                            Create Listing
+                        </h2>
+                    </header>
+
+                    <section>
+                        <form class="form grid gap-4">
+                            <div class="grid gap-3">
+                                <label for="create-listing-dialog-form-title"
+                                    >Title</label
+                                >
+                                <input
+                                    type="text"
+                                    value=""
+                                    id="create-listing-dialog-form-title"
+                                    autofocus
+                                />
+                            </div>
+                            <div class="grid gap-3">
+                                <label for="create-listing-dialog-form-desc"
+                                    >Description</label
+                                >
+                                <textarea
+                                    class="textarea"
+                                    placeholder=""
+                                    value=""
+                                    id="create-listing-dialog-form-desc"
+                                ></textarea>
+                            </div>
+                            <div class="grid gap-3">
+                                <label for="create-listing-dialog-form-price"
+                                    >Price per night (£)</label
+                                >
+                                <input
+                                    type="number"
+                                    value=""
+                                    id="create-listing-dialog-form-price"
+                                    min="0"
+                                    step="1"
+                                />
+                            </div>
+                            <div class="grid gap-3">
+                                <label for="create-listing-date-picker"
+                                    >Select Available dates</label
+                                >
+                                <input
+                                    type="text"
+                                    id="create-listing-date-picker"
+                                    placeholder="Select date range"
+                                    readonly
+                                />
+                            </div>
+                        </form>
+                    </section>
+
+                    <footer>
+                        <button
+                            class="btn"
+                            onclick="this.closest('dialog').close()"
+                        >
+                            Create
+                        </button>
+                    </footer>
+
+                    <button
+                        type="button"
+                        aria-label="Close dialog"
+                        onclick="this.closest('dialog').close()"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-x-icon lucide-x"
+                        >
+                            <path d="M18 6 6 18" />
+                            <path d="m6 6 12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </dialog>
+            {% endif %}
+        </div>
+
         <section class="grid grid-cols-3 gap-4">
             {% for listing in listings %}
             <div
@@ -329,5 +439,14 @@ block content %}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    flatpickr("#create-listing-date-picker", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        inline: true,
+    });
+</script>
 
 {% endblock %}
