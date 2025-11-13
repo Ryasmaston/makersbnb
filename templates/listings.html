@@ -265,7 +265,7 @@ block content %}
                     const pricePerNight = {{listing.price_per_night}};
                     const listingId = {{listing.id}};
 
-                    flatpickr("#date-picker-" + listingId, {
+                    const fpInstance = flatpickr("#date-picker-" + listingId, {
                         mode: "range",
                         inline: true,
                         dateFormat: "Y-m-d",
@@ -304,6 +304,17 @@ block content %}
                                 bookButton.disabled = true;
                             }
                         }
+                    });
+
+                    // this resets the date selection when we close the dialog
+                    const dialog = document.getElementById("listing-" + listingId + "-dialog");
+                    dialog.addEventListener("close", () => {
+                        console.log("Dialog closed, resetting dates for listing " + listingId);
+                        // clear dates array
+                        fpInstance.setDate([], false);
+                        document.getElementById("total-nights-" + listingId).textContent = "Select dates";
+                        document.getElementById("total-price-" + listingId).textContent = "£0";
+                        document.getElementById("book-btn-" + listingId).disabled = true;
                     });
                 });
             </script>
