@@ -8,7 +8,6 @@ block content %}
                 <p>Enter your details below to register to MakersBnB</p>
             </header>
             <section>
-
                 <form class="form grid gap-6" action="/register" method="POST">
                     <div class="grid gap-2">
                         <label for="name">Name</label>
@@ -44,7 +43,9 @@ block content %}
                     </div>
                     <div class="grid gap-2">
                         <div class="flex items-center justify-between gap-2">
-                            <label for="confirm_password">Confirm Password</label>
+                            <label for="confirm_password"
+                                >Confirm Password</label
+                            >
 
                             <span id="password_message" class="text-sm"></span>
                         </div>
@@ -56,7 +57,11 @@ block content %}
                         />
                     </div>
                     <div class="flex flex-col gap-2">
-                        <button type="submit" id="submit_button" class="btn w-full">
+                        <button
+                            type="submit"
+                            id="submit_button"
+                            class="btn w-full"
+                        >
                             Create Account
                         </button>
                     </div>
@@ -67,32 +72,30 @@ block content %}
 </div>
 
 <script>
-    const password = document.getElementById('password');
-    const confirm_password = document.getElementById('confirm_password');
-    const message = document.getElementById('password_message');
-    const submitButton = document.getElementById('submit_button');
+    const password = document.getElementById("password");
+    const confirm_password = document.getElementById("confirm_password");
+    const message = document.getElementById("password_message");
+    const submitButton = document.getElementById("submit_button");
 
     function checkPasswords() {
-        if (password.value === '' && confirm_password.value === '') {
-            message.textContent = '';
+        if (password.value === "" && confirm_password.value === "") {
+            message.textContent = "";
             submitButton.disabled = false;
             return;
         }
 
         if (password.value === confirm_password.value) {
-            message.textContent = 'Passwords match!';
-            message.className = 'text-sm text-green-500';
+            message.textContent = "Passwords match!";
+            message.className = "text-sm text-green-500";
             submitButton.disabled = false;
         } else {
-            message.textContent = 'Passwords do not match.';
-            message.className = 'text-sm text-red-500';
+            message.textContent = "Passwords do not match.";
+            message.className = "text-sm text-red-500";
             submitButton.disabled = true;
         }
     }
 
-
-    confirm_password.addEventListener('input', checkPasswords);
-
+    confirm_password.addEventListener("input", checkPasswords);
 
     checkPasswords();
 </script>
