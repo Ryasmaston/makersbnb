@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
-    <head>
         <title>{% block title %}MakersBnB{% endblock %}</title>
+        <link rel="icon" type="image/x-icon" href="/static/assets/favicon.ico" />
         <link rel="stylesheet" href="/static/style.css" />
         <link
             rel="stylesheet"
@@ -34,12 +34,15 @@
                     <span class="block h-1 bg-gray-800 rounded"></span>
                 </button>
                 <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white text-black transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 z-60 shadow-md">
-                    <div class="p-6 text-2xl font-semibold cursor-default">Menu</div>
+                    <div class="w-full flex items-center justify-center opacity-30"><img
+                        src="./static/assets/IMG_8796.jpg"
+                        alt="MakersBnB Logo"
+                        class="h-10 w-auto mt-5"
+                    /></div>
                     <nav class="flex flex-col p-4 space-y-2">
-                    <a href="/" class="px-4 py-2 rounded hover:bg-black hover:text-white">Home</a>
+                    <a href="/" class="px-4 py-2 rounded hover:bg-black hover:text-white mt-5">Home</a>
                     <a href="/listings" class="px-4 py-2 rounded hover:bg-black hover:text-white">Listings</a>
                     <a href="/settings" class="px-4 py-2 rounded hover:bg-black hover:text-white">Bookings</a>
-                    <a href="/logout" class="px-4 py-2 rounded hover:bg-black hover:text-white">Logout</a>
                     </nav>
                 </aside>
             </div>
