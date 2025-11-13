@@ -1,5 +1,11 @@
 import os
+<<<<<<< HEAD
 from flask import Flask, request, render_template, session, redirect, url_for
+=======
+from flask import Flask, request, render_template, session
+from flask.helpers import get_flashed_messages
+from lib.booking_repository import BookingRepository
+>>>>>>> 1f5d8579e864f8907657c20b66a1b1eaee9df8d9
 from lib.database_connection import get_flask_database_connection
 from lib.listing_repository import ListingRepository
 from lib.booking_repository import BookingRepository
@@ -21,6 +27,7 @@ app.secret_key = 'makersbnb_secret_key'
 def get_index():
     return render_template('index.html', user=session)
 
+#   ; open http://localhost:5001/index
 
 # @app.route('/sessions/new', methods=['GET'])
 # def get_login_page():
@@ -60,6 +67,13 @@ def post_listings():
     new_listing = Listing(None, title, description, price_per_night, start_available_date, end_available_date, host_id)
     listing_repo.create(new_listing)
     return redirect(url_for('get_listings'))
+@app.route('/bookings', methods=['GET'])
+
+def get_bookings():
+    booking_repo = BookingRepository(get_flask_database_connection(app))
+    outbound_bookings = booking_repo.all_with_guest_id(session['user_id'])
+    inbound_bookings = booking_repo.all_with_host_id(session['user_id'])
+    return render_template('bookings.html', outbound_bookings=outbound_bookings, inbound_bookings=inbound_bookings)
 
 # @app.route('/listings/new', methods=['POST'])
 # def get_login_page():
