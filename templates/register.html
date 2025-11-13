@@ -31,8 +31,9 @@ block content %}
                         />
                     </div>
                     <div class="grid gap-2">
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center justify-between gap-2">
                             <label for="password">Password</label>
+                            <span id="password_valid_message" class="text-sm text-right"></span>
                         </div>
                         <input
                             type="password"
@@ -74,30 +75,59 @@ block content %}
 <script>
     const password = document.getElementById("password");
     const confirm_password = document.getElementById("confirm_password");
+    const valid_message = document.getElementById("password_valid_message");
     const message = document.getElementById("password_message");
     const submitButton = document.getElementById("submit_button");
 
-    function checkPasswords() {
+    // Regular Expression to check for the required complexity:
+    // 1. Minimum 8 characters total:                  .{8,}
+    // 2. At least one digit (0-9):                    (?=.*\d)
+    // 3. At least one special character (non-word, non-space): (?=.*[^\w\s])
+    const passwordRegex = /^(?=.*\d)(?=.*[^\w\s]).{8,}$/;
+
+    // Main function to check both conditions and control the submit button
+    function updateSubmitButtonState() {
+        const isPasswordValid = checkPasswordComplexity();
+        const doPasswordsMatch = checkPasswordsMatch();
+
+        submitButton.disabled = !(isPasswordValid && doPasswordsMatch);
+    }
+
+    function checkPasswordComplexity() {
+        const passwordValue = password.value;
+        const isValid = passwordRegex.test(passwordValue);
+
+        if (isValid) {
+            valid_message.textContent = "Valid password!";
+            valid_message.className = passwordValue.length > 0 ? "text-sm text-green-500" : "text-sm";
+        } else {
+            valid_message.textContent = "Password must be at least 8 characters long, contain 1 number, and 1 symbol.";
+            valid_message.className = passwordValue.length > 0 ? "text-xs text-red-500 text-right" : "text-xs text-gray-500 text-right";
+        }
+        return isValid;
+    }
+
+    function checkPasswordsMatch() {
         if (password.value === "" && confirm_password.value === "") {
             message.textContent = "";
-            submitButton.disabled = false;
-            return;
+            return false;
         }
 
         if (password.value === confirm_password.value) {
             message.textContent = "Passwords match!";
             message.className = "text-sm text-green-500";
-            submitButton.disabled = false;
+            return true;
         } else {
             message.textContent = "Passwords do not match.";
             message.className = "text-sm text-red-500";
-            submitButton.disabled = true;
+            return false;
         }
     }
 
-    confirm_password.addEventListener("input", checkPasswords);
+    password.addEventListener("input", updateSubmitButtonState);
+    confirm_password.addEventListener("input", updateSubmitButtonState);
 
-    checkPasswords();
+    updateSubmitButtonState();
 </script>
 
 {% endblock %}
