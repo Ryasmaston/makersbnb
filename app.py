@@ -95,12 +95,21 @@ def post_bookings():
 def confirm_booking(booking_id):
     connection = get_flask_database_connection(app)
     booking_repo = BookingRepository(connection)
+    booking_repo.approve_booking(booking_id)
     return redirect(url_for('get_bookings'))
 
 @app.route('/bookings/<booking_id>/reject', methods=['POST'])
 def reject_booking(booking_id):
     connection = get_flask_database_connection(app)
     booking_repo = BookingRepository(connection)
+    booking_repo.deny_booking(booking_id)
+    return redirect(url_for('get_bookings'))
+
+@app.route('/bookings/<booking_id>/cancel', methods=['POST'])
+def cancel_booking(booking_id):
+    connection = get_flask_database_connection(app)
+    booking_repo = BookingRepository(connection)
+    booking_repo.cancel_booking(booking_id)
     return redirect(url_for('get_bookings'))
 
 @app.errorhandler(404)
