@@ -131,3 +131,11 @@ span.flatpickr-weekday {
     color: #fff !important;
     box-shadow: none !important; /* small overlap hides the white gap */
 }
+
+/* Custom tooltip size override */
+[data-tooltip][data-tooltip-size="lg"]::before,
+[data-tooltip][data-tooltip-size="lg"]::after {
+    font-size: 1.125rem !important; /* 18px */
+    padding: 0.75rem 1rem !important;
+    max-width: 280px !important;
+}

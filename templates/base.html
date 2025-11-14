@@ -47,7 +47,11 @@
                     <nav class="flex flex-col p-4 space-y-2">
                     <a href="/" class="btn-ghost text-lg mx-2 ">Home</a>
                     <a href="/listings" class="px-4 mx-2 py-2 btn-ghost text-lg">Listings</a>
+                    {% if user %}
                     <a href="/bookings" class="px-4 py-2 mx-2  btn-ghost text-lg">Bookings</a>
+                    {% else %}
+                    <button class="btn-ghost hover:bg-white px-4 py-2 mx-2  text-gray-400 btn-ghost text-lg cursor-default" data-tooltip="Sign in to view bookings" data-side="right" data-tooltip-size="lg">Bookings</button>
+                    {% endif %}
                     {% if user %}
                     <a href="/logout" class="px-4 py-2 mx-2  btn-ghost text-lg">Sign out</a>
                     {% else %}
