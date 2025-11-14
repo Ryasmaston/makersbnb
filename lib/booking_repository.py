@@ -74,7 +74,7 @@ class BookingRepository:
         """
         rows = self._connection.execute(sql, [listing_id])
         return [{"start_date": str(row["start_date"]), "end_date": str(row["end_date"])} for row in rows]
-      
+
     def deny_booking(self, booking_id):
         """
         Set booking from 'pending' -> 'denied'.
@@ -117,4 +117,88 @@ class BookingRepository:
         """
         rows = self._connection.execute(sql, [host_id])
         bookings = [Booking(row['id'], row['start_date'], row['end_date'], row['listing_id'], row['guest_id'], row['status']) for row in rows]
+        return bookings
+
+    def all_with_guest_id_join_listings(self, guest_id):
+        sql = """
+        SELECT
+            bookings.id,
+            bookings.start_date,
+            bookings.end_date,
+            bookings.listing_id,
+            bookings.guest_id,
+            bookings.status,
+            listings.title as listing_title,
+            listings.description as listing_description,
+            listings.price_per_night as listing_price_per_night,
+            listings.host_id as listing_host_id,
+            (bookings.end_date - bookings.start_date) * listings.price_per_night as total_price
+        FROM bookings
+        JOIN listings ON listings.id = bookings.listing_id
+        WHERE bookings.guest_id = %s
+        ORDER BY bookings.start_date ASC
+        """
+        rows = self._connection.execute(sql, [guest_id])
+        # Return dictionaries with both booking and listing data
+        bookings = []
+        for row in rows:
+            booking_dict = {
+                'id': row['id'],
+                'start_date': row['start_date'],
+                'end_date': row['end_date'],
+                'listing_id': row['listing_id'],
+                'guest_id': row['guest_id'],
+                'status': row['status'],
+                'listing_title': row['listing_title'],
+                'listing_description': row['listing_description'],
+                'listing_price_per_night': row['listing_price_per_night'],
+                'listing_host_id': row['listing_host_id'],
+                'total_price': row['total_price']
+            }
+            bookings.append(booking_dict)
+        return bookings
+
+    def all_with_host_id_join_listings(self, host_id):
+        sql = """
+        SELECT
+            bookings.id,
+            bookings.start_date,
+            bookings.end_date,
+            bookings.listing_id,
+            bookings.guest_id,
+            bookings.status,
+            listings.title as listing_title,
+            listings.description as listing_description,
+            listings.price_per_night as listing_price_per_night,
+            listings.host_id as listing_host_id,
+            (bookings.end_date - bookings.start_date) * listings.price_per_night as total_price
+        FROM bookings
+        JOIN listings ON listings.id = bookings.listing_id
+        WHERE listings.host_id = %s
+        ORDER BY
+            CASE
+                WHEN bookings.status = 'pending' THEN 1
+                WHEN bookings.status = 'confirmed' THEN 2
+                ELSE 3
+            END,
+            bookings.start_date ASC
+        """
+        rows = self._connection.execute(sql, [host_id])
+        # Return dictionaries with both booking and listing data
+        bookings = []
+        for row in rows:
+            booking_dict = {
+                'id': row['id'],
+                'start_date': row['start_date'],
+                'end_date': row['end_date'],
+                'listing_id': row['listing_id'],
+                'guest_id': row['guest_id'],
+                'status': row['status'],
+                'listing_title': row['listing_title'],
+                'listing_description': row['listing_description'],
+                'listing_price_per_night': row['listing_price_per_night'],
+                'listing_host_id': row['listing_host_id'],
+                'total_price': row['total_price']
+            }
+            bookings.append(booking_dict)
         return bookings
