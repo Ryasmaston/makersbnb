@@ -115,11 +115,11 @@ def test_cancel_overlapping_bookings(db_connection):
     # Confirm booking 4 (2025-06-01 to 2025-06-05)
     repo.approve_booking(4)
 
-    # Check that booking 5 was cancelled (overlaps: 06-03 to 06-07)
+    # Check that booking 5 was denied (overlaps: 06-03 to 06-07)
     booking_5 = repo.find(5)
-    assert booking_5.status == 'cancelled'
+    assert booking_5.status == 'denied'
 
-    # Check that booking 6 was NOT cancelled (doesn't overlap: 06-06 to 06-10)
+    # Check that booking 6 was NOT denied (doesn't overlap: 06-06 to 06-10)
     booking_6 = repo.find(6)
     assert booking_6.status == 'pending'
 
@@ -161,12 +161,12 @@ def test_all_overlap_scenarios(db_connection):
     # confirm the booking
     repo.approve_booking(confirmed_booking.id)
 
-    # assert overlapping bookings were cancelled
-    assert repo.find(5).status == 'cancelled'  # scenario 1: contains confirmed
-    assert repo.find(6).status == 'cancelled'  # scenario 2: contained by confirmed
-    assert repo.find(7).status == 'cancelled'  # scenario 3: starts before, ends during
-    assert repo.find(8).status == 'cancelled'  # scenario 4: starts during, ends after
-    assert repo.find(9).status == 'cancelled'  # scenario 5: exact match
+    # assert overlapping bookings were denied
+    assert repo.find(5).status == 'denied'  # scenario 1: contains confirmed
+    assert repo.find(6).status == 'denied'  # scenario 2: contained by confirmed
+    assert repo.find(7).status == 'denied'  # scenario 3: starts before, ends during
+    assert repo.find(8).status == 'denied'  # scenario 4: starts during, ends after
+    assert repo.find(9).status == 'denied'  # scenario 5: exact match
 
     # assert non-overlapping bookings are pending
     assert repo.find(10).status == 'pending'  # scenario 6: before

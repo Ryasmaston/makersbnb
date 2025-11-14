@@ -91,6 +91,18 @@ def post_bookings():
     booking_repo.create(new_booking)
     return redirect(url_for('get_bookings'))
 
+@app.route('/bookings/<booking_id>/confirm', methods=['POST'])
+def confirm_booking(booking_id):
+    connection = get_flask_database_connection(app)
+    booking_repo = BookingRepository(connection)
+    return redirect(url_for('get_bookings'))
+
+@app.route('/bookings/<booking_id>/reject', methods=['POST'])
+def reject_booking(booking_id):
+    connection = get_flask_database_connection(app)
+    booking_repo = BookingRepository(connection)
+    return redirect(url_for('get_bookings'))
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('error_page.html', user=session, error=error), 404
