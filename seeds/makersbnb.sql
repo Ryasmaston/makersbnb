@@ -39,12 +39,12 @@ INSERT INTO users (name, email, password) VALUES
 
 -- Listings
 INSERT INTO listings (title, description, price_per_night, start_available_date, end_available_date, host_id) VALUES
-('Cozy Cabin in the Woods', 'A small rustic cabin with beautiful forest views.', 120, '2025-01-01', '2025-12-31', 1),
-('Modern Apartment Downtown', 'Close to shops, cafes, and nightlife.', 200, '2025-02-01', '2025-08-31', 2),
-('Beachside Bungalow', 'Steps away from the ocean with amazing sunsets.', 180, '2025-03-15', '2025-11-15', 1);
+('Cozy Cabin in the Woods', 'A small rustic cabin with beautiful forest views.', 120, '2025-01-01', '2026-12-31', 1),
+('Modern Apartment Downtown', 'Close to shops, cafes, and nightlife.', 200, '2025-02-01', '2026-08-31', 2),
+('Beachside Bungalow', 'Steps away from the ocean with amazing sunsets.', 180, '2025-03-15', '2026-11-15', 1);
 
 -- Bookings
 INSERT INTO bookings (start_date, end_date, listing_id, guest_id, status) VALUES
-('2025-04-01', '2025-04-05', 1, 2, 'confirmed'),
-('2025-05-10', '2025-05-15', 2, 3, 'pending'),
-('2025-07-20', '2025-07-25', 3, 2, 'denied');
+('2026-04-01', '2026-04-05', 1, 2, 'confirmed'),
+('2026-05-10', '2026-05-15', 2, 3, 'pending'),
+('2026-07-20', '2026-07-25', 3, 2, 'denied');

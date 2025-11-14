@@ -87,6 +87,25 @@ def post_listings():
     listing_repo.create(new_listing)
     return redirect(url_for('get_listings'))
 
+@app.route('/listings/<int:listing_id>/delete', methods=['POST'])
+def delete_listing(listing_id):
+    if 'user_id' not in session:
+        return redirect(url_for('get_index'))
+    connection = get_flask_database_connection(app)
+    listing_repo = ListingRepository(connection)
+    booking_repo = BookingRepository(connection)
+    listing = listing_repo.get_by_id(listing_id)
+    if not listing:
+        return "Listing not found", 404
+    if listing.host_id != session['user_id']:
+        return "Unauthorized", 403
+    future_bookings = booking_repo.get_future_bookings_for_listing(listing_id)
+    if future_bookings:
+        return "Cannot delete listing with active bookings", 400
+    listing_repo.delete(listing_id)
+    return redirect(url_for('get_listings'))
+
+
 @app.route('/bookings', methods=['GET'])
 def get_bookings():
     connection = get_flask_database_connection(app)

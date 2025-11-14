@@ -485,6 +485,20 @@ block content %}
                                 </button>
                             </div>
                         </form>
+                        {% if user and user.get('user_id') == listing.host_id %}
+                        <form action="/listings/{{ listing.id }}/delete" method="POST">
+                            <button
+                                class="btn-outline text-sm border-red-600 text-red-600 hover:bg-red-50"
+                                onclick="event.stopPropagation()"
+                                type="submit"
+                                {% if future_bookings %}
+                                    title="Cannot delete listing with active bookings"
+                                {% endif %}
+                            >
+                                Delete Listing
+                            </button>
+                        </form>
+                        {% endif %}
                     </footer>
 
                     <button

@@ -28,7 +28,7 @@ class ListingRepository:
         return None
 
     def update(self, listing):
-        self._connection.execute('UPDATE listings SET title = %s, description = %s, price_per_night = %s, start_date = %s, end_date = %s host_id = %s,  WHERE id = %s', [listing.title, listing.description, listing.price_per_night, listing.start_available_date, listing.end_available_date, listing.host_id, listing.id])
+        self._connection.execute('UPDATE listings SET title = %s, description = %s, price_per_night = %s, start_date = %s, end_date = %s, host_id = %s,  WHERE id = %s', [listing.title, listing.description, listing.price_per_night, listing.start_available_date, listing.end_available_date, listing.host_id, listing.id])
 
     # Delete an listing by their id
     def delete(self, listing_id):
@@ -39,6 +39,24 @@ class ListingRepository:
     def get_available_dates(self, listing_id):
         dates = self._connection.execute('SELECT start_available_date, end_available_date from listings WHERE id = %s', [listing_id])
         return dates
+
+    def get_by_id(self, listing_id):
+            rows = self._connection.execute('SELECT * FROM listings WHERE id = %s', [listing_id])
+            row = None
+            for r in rows:
+                row = r
+                break
+            if row:
+                return Listing(
+                    row["id"],
+                    row["title"],
+                    row["description"],
+                    row["price_per_night"],
+                    row["start_available_date"],
+                    row["end_available_date"],
+                    row["host_id"]
+                )
+            return None
 
     # Returns listings that are available between start_date + end_date
     # And does not clash with any existing, confirmed bookings
