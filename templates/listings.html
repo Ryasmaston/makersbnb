@@ -487,6 +487,19 @@ block content %}
                                 >
                                     Book
                                 </button>
+                                {% elif user.user_id == listing.host_id %}
+                                <button
+                                    class="btn cursor-default opacity-50"
+                                    id="book-btn-{{listing.id}}"
+                                    action="/bookings/new"
+                                    type="button"
+                                    data-tooltip="Can't book own listing"
+                                    data-side="top"
+                                    data-tooltip-size="m"
+                                    onclick="return false;"
+                                >
+                                    Book
+                                </button>
                                 {% else %}
                                 <button
                                     class="btn"
