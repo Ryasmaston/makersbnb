@@ -17,14 +17,14 @@ def apply_login_route(app):
 
             user = repository.login(email, password)
 
-            if user:
+            if not user:
+                return redirect(url_for('login'))
+            else:
                 session['loggedin'] = True
                 session['user_id'] = user.id
                 session['name'] = user.name
                 session['email'] = user.email
                 return redirect(url_for('get_listings'))
-            else:
-                return render_template('index.html', fail=True)
 
         return render_template('index.html')
 
