@@ -69,35 +69,28 @@
                             <div
                                 class="flex flex-col items-center justify-between"
                             >
-                                <!--<span class="text-xs text-gray-500"
-                                    >Booking #{{booking.id}}</span
-                                >-->
                                 <span
                                     class="mt-1 {% if booking.status == 'confirmed' %}text-green-600{% elif booking.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %} font-semibold text-sm"
                                 >
                                     {{booking.status | capitalize}}
                                 </span>
-                                <form
-                                    action="/bookings/{{booking.id}}/cancel"
-                                    method="POST"
+                                {% if booking.status == "pending" %}
+                                <button
+                                    type="button"
+                                    class="btn-outline mt-3 text-sm border-red-600 text-red-600 hover:bg-red-50"
+                                    onclick="event.stopPropagation(); document.getElementById('cancel-booking-{{booking.id}}-dialog').showModal()"
                                 >
-                                    {% if booking.status == "pending" %}
-                                    <button
-                                        class="btn-outline mt-3 text-sm border-red-600 text-red-600 hover:bg-red-50"
-                                        onclick="event.stopPropagation()"
-                                    >
-                                        Cancel
-                                    </button>
-                                    {% else %}
-                                    <button
-                                        class="btn-outline mt-3 text-sm opacity-70 cursor-not-allowed"
-                                        disabled
-                                        onclick="event.stopPropagation()"
-                                    >
-                                        Cancel
-                                    </button>
-                                    {% endif %}
-                                </form>
+                                    Cancel
+                                </button>
+                                {% else %}
+                                <button
+                                    class="btn-outline mt-3 text-sm opacity-70 cursor-not-allowed"
+                                    disabled
+                                    onclick="event.stopPropagation()"
+                                >
+                                    Cancel
+                                </button>
+                                {% endif %}
                             </div>
                         </footer>
                     </div>
@@ -171,11 +164,67 @@
                             </button>
                         </div>
                     </dialog>
+
+                    <!-- Cancel Booking Confirmation Dialog -->
+                    <dialog
+                        id="cancel-booking-{{booking.id}}-dialog"
+                        class="dialog max-w-[420px]"
+                        onclick="if (event.target === this) this.close()"
+                    >
+                        <div>
+                            <header>
+                                <h2>Cancel Booking?</h2>
+                                <p class="text-gray-600 mt-2">
+                                    Are you sure you want to cancel your booking for {{booking.listing_title}}? This action cannot be undone.
+                                </p>
+                            </header>
+
+                            <footer class="flex gap-2 justify-end mt-6">
+                                <button
+                                    type="button"
+                                    class="btn-outline"
+                                    onclick="document.getElementById('cancel-booking-{{booking.id}}-dialog').close()"
+                                >
+                                    Keep Booking
+                                </button>
+                                <form action="/bookings/{{booking.id}}/cancel" method="POST" class="inline">
+                                    <button
+                                        type="submit"
+                                        class="btn bg-red-600 hover:bg-red-700"
+                                    >
+                                        Cancel Booking
+                                    </button>
+                                </form>
+                            </footer>
+
+                            <button
+                                type="button"
+                                aria-label="Close dialog"
+                                onclick="this.closest('dialog').close()"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="lucide lucide-x-icon lucide-x"
+                                >
+                                    <path d="M18 6 6 18" />
+                                    <path d="m6 6 12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </dialog>
                     {% endfor %}
                 </div>
                 {% else %}
                 <p class="text-gray-500 text-center mt-6">
-                    You haven’t made any bookings yet.
+                    You haven't made any bookings yet.
                 </p>
                 {% endif %}
             </section>
@@ -227,10 +276,6 @@
                                 </span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <!--<span class="text-xs text-gray-500"
-                                    >Booking #{{booking.id}} • Guest
-                                    #{{booking.guest_id}}</span
-                                >-->
                                 <span
                                     class="{% if booking.status == 'confirmed' %}text-green-600{% elif booking.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %} font-semibold text-sm"
                                 >
@@ -239,28 +284,20 @@
                             </div>
                             <div class="mt-2 flex justify-end gap-2">
                                 {% if booking.status == 'pending' %}
-                                <form
-                                    action="/bookings/{{booking.id}}/confirm"
-                                    method="POST"
+                                <button
+                                    type="button"
+                                    class="btn text-sm bg-green-600 hover:bg-green-700"
+                                    onclick="event.stopPropagation(); document.getElementById('confirm-booking-{{booking.id}}-dialog').showModal()"
                                 >
-                                    <button
-                                        class="btn text-sm bg-green-600 hover:bg-green-700"
-                                        onclick="event.stopPropagation()"
-                                    >
-                                        Confirm
-                                    </button>
-                                </form>
-                                <form
-                                    action="/bookings/{{booking.id}}/reject"
-                                    method="POST"
+                                    Confirm
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn-outline text-sm border-red-600 text-red-600 hover:bg-red-50"
+                                    onclick="event.stopPropagation(); document.getElementById('reject-booking-{{booking.id}}-dialog').showModal()"
                                 >
-                                    <button
-                                        class="btn-outline text-sm border-red-600 text-red-600 hover:bg-red-50"
-                                        onclick="event.stopPropagation()"
-                                    >
-                                        Reject
-                                    </button>
-                                </form>
+                                    Reject
+                                </button>
                                 {% else %}
                                 <button
                                     class="btn-outline text-sm opacity-70 cursor-not-allowed"
@@ -272,6 +309,118 @@
                             </div>
                         </footer>
                     </div>
+
+                    <!-- Confirm Booking Dialog -->
+                    <dialog
+                        id="confirm-booking-{{booking.id}}-dialog"
+                        class="dialog max-w-[420px]"
+                        onclick="if (event.target === this) this.close()"
+                    >
+                        <div>
+                            <header>
+                                <h2>Confirm Booking?</h2>
+                                <p class="text-gray-600 mt-2">
+                                    Are you sure you want to confirm this booking for {{booking.listing_title}}? This will deny any overlapping pending bookings.
+                                </p>
+                            </header>
+
+                            <footer class="flex gap-2 justify-end mt-6">
+                                <button
+                                    type="button"
+                                    class="btn-outline"
+                                    onclick="document.getElementById('confirm-booking-{{booking.id}}-dialog').close()"
+                                >
+                                    Cancel
+                                </button>
+                                <form action="/bookings/{{booking.id}}/confirm" method="POST" class="inline">
+                                    <button
+                                        type="submit"
+                                        class="btn bg-green-600 hover:bg-green-700"
+                                    >
+                                        Confirm Booking
+                                    </button>
+                                </form>
+                            </footer>
+
+                            <button
+                                type="button"
+                                aria-label="Close dialog"
+                                onclick="this.closest('dialog').close()"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="lucide lucide-x-icon lucide-x"
+                                >
+                                    <path d="M18 6 6 18" />
+                                    <path d="m6 6 12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </dialog>
+
+                    <!-- Reject Booking Dialog -->
+                    <dialog
+                        id="reject-booking-{{booking.id}}-dialog"
+                        class="dialog max-w-[420px]"
+                        onclick="if (event.target === this) this.close()"
+                    >
+                        <div>
+                            <header>
+                                <h2>Reject Booking?</h2>
+                                <p class="text-gray-600 mt-2">
+                                    Are you sure you want to reject this booking request for {{booking.listing_title}}? This action cannot be undone.
+                                </p>
+                            </header>
+
+                            <footer class="flex gap-2 justify-end mt-6">
+                                <button
+                                    type="button"
+                                    class="btn-outline"
+                                    onclick="document.getElementById('reject-booking-{{booking.id}}-dialog').close()"
+                                >
+                                    Cancel
+                                </button>
+                                <form action="/bookings/{{booking.id}}/reject" method="POST" class="inline">
+                                    <button
+                                        type="submit"
+                                        class="btn bg-red-600 hover:bg-red-700"
+                                    >
+                                        Reject Booking
+                                    </button>
+                                </form>
+                            </footer>
+
+                            <button
+                                type="button"
+                                aria-label="Close dialog"
+                                onclick="this.closest('dialog').close()"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="lucide lucide-x-icon lucide-x"
+                                >
+                                    <path d="M18 6 6 18" />
+                                    <path d="m6 6 12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </dialog>
                     {% endfor %}
                 </div>
                 {% else %}
