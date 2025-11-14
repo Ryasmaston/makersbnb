@@ -52,7 +52,7 @@
                                 src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75"
                             />
                         </section>
-                        <footer class="flex flex-col gap-1">
+                        <footer class="flex flex-col">
                             <div
                                 class="flex flex-col items-center justify-between"
                             >
@@ -73,10 +73,31 @@
                                     >Booking #{{booking.id}}</span
                                 >-->
                                 <span
-                                    class="{% if booking.status == 'confirmed' %}text-green-600{% elif booking.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %} font-semibold mt-2 text-sm"
+                                    class="mt-1 {% if booking.status == 'confirmed' %}text-green-600{% elif booking.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %} font-semibold text-sm"
                                 >
                                     {{booking.status | capitalize}}
                                 </span>
+                                <form
+                                    action="/bookings/{{booking.id}}/cancel"
+                                    method="POST"
+                                >
+                                    {% if booking.status == "pending" %}
+                                    <button
+                                        class="btn-outline mt-3 text-sm border-red-600 text-red-600 hover:bg-red-50"
+                                        onclick="event.stopPropagation()"
+                                    >
+                                        Cancel
+                                    </button>
+                                    {% else %}
+                                    <button
+                                        class="btn-outline mt-3 text-sm opacity-70 cursor-not-allowed"
+                                        disabled
+                                        onclick="event.stopPropagation()"
+                                    >
+                                        Cancel
+                                    </button>
+                                    {% endif %}
+                                </form>
                             </div>
                         </footer>
                     </div>
