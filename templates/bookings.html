@@ -82,14 +82,6 @@
                                 >
                                     Cancel
                                 </button>
-                                {% else %}
-                                <button
-                                    class="btn-outline mt-3 text-sm opacity-70 cursor-not-allowed"
-                                    disabled
-                                    onclick="event.stopPropagation()"
-                                >
-                                    Cancel
-                                </button>
                                 {% endif %}
                             </div>
                         </footer>
@@ -100,8 +92,8 @@
                         class="dialog max-w-[420px]"
                         onclick="if (event.target === this) this.close()"
                     >
-                        <div class="p-6">
-                            <header class="mb-4">
+                        <div class="pt-6 px-6">
+                            <header class="">
                                 <h2 class="text-2xl font-semibold">
                                     {{booking.listing_title}}
                                 </h2>
@@ -139,7 +131,6 @@
                                     </p>
                                 </div>
                             </section>
-                            <footer class="mt-2 flex justify-end"></footer>
 
                             <button
                                 type="button"
@@ -175,7 +166,9 @@
                             <header>
                                 <h2>Cancel Booking?</h2>
                                 <p class="text-gray-600 mt-2">
-                                    Are you sure you want to cancel your booking for {{booking.listing_title}}? This action cannot be undone.
+                                    Are you sure you want to cancel your booking
+                                    for {{booking.listing_title}}? This action
+                                    cannot be undone.
                                 </p>
                             </header>
 
@@ -187,7 +180,11 @@
                                 >
                                     Keep Booking
                                 </button>
-                                <form action="/bookings/{{booking.id}}/cancel" method="POST" class="inline">
+                                <form
+                                    action="/bookings/{{booking.id}}/cancel"
+                                    method="POST"
+                                    class="inline"
+                                >
                                     <button
                                         type="submit"
                                         class="btn bg-red-600 hover:bg-red-700"
@@ -282,8 +279,8 @@
                                     {{booking.status | capitalize}}
                                 </span>
                             </div>
+                            {% if booking.status == 'pending' %}
                             <div class="mt-2 flex justify-end gap-2">
-                                {% if booking.status == 'pending' %}
                                 <button
                                     type="button"
                                     class="btn text-sm bg-green-600 hover:bg-green-700"
@@ -298,15 +295,8 @@
                                 >
                                     Reject
                                 </button>
-                                {% else %}
-                                <button
-                                    class="btn-outline text-sm opacity-70 cursor-not-allowed"
-                                    disabled
-                                >
-                                    {{booking.status | capitalize}}
-                                </button>
-                                {% endif %}
                             </div>
+                            {% endif %}
                         </footer>
                     </div>
 
@@ -320,7 +310,9 @@
                             <header>
                                 <h2>Confirm Booking?</h2>
                                 <p class="text-gray-600 mt-2">
-                                    Are you sure you want to confirm this booking for {{booking.listing_title}}? This will deny any overlapping pending bookings.
+                                    Are you sure you want to confirm this
+                                    booking for {{booking.listing_title}}? This
+                                    will deny any overlapping pending bookings.
                                 </p>
                             </header>
 
@@ -332,7 +324,11 @@
                                 >
                                     Cancel
                                 </button>
-                                <form action="/bookings/{{booking.id}}/confirm" method="POST" class="inline">
+                                <form
+                                    action="/bookings/{{booking.id}}/confirm"
+                                    method="POST"
+                                    class="inline"
+                                >
                                     <button
                                         type="submit"
                                         class="btn bg-green-600 hover:bg-green-700"
@@ -376,7 +372,9 @@
                             <header>
                                 <h2>Reject Booking?</h2>
                                 <p class="text-gray-600 mt-2">
-                                    Are you sure you want to reject this booking request for {{booking.listing_title}}? This action cannot be undone.
+                                    Are you sure you want to reject this booking
+                                    request for {{booking.listing_title}}? This
+                                    action cannot be undone.
                                 </p>
                             </header>
 
@@ -388,7 +386,11 @@
                                 >
                                     Cancel
                                 </button>
-                                <form action="/bookings/{{booking.id}}/reject" method="POST" class="inline">
+                                <form
+                                    action="/bookings/{{booking.id}}/reject"
+                                    method="POST"
+                                    class="inline"
+                                >
                                     <button
                                         type="submit"
                                         class="btn bg-red-600 hover:bg-red-700"
