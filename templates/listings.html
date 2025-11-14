@@ -514,17 +514,30 @@ block content %}
                             </div>
                         </form>
                         {% if user and user.get('user_id') == listing.host_id %}
-                        <form action="/listings/{{ listing.id }}/delete" method="POST">
+                        <form
+                            action="/listings/{{ listing.id }}/delete"
+                            method="POST"
+                        >
+                            {% if has_future_bookings.get(listing.id) %}
+                            <button
+                                class="btn-outline text-sm border-red-600 text-red-600 opacity-50 cursor-default hover:bg-white"
+                                onclick="return false;"
+                                type="button"
+                                data-tooltip="Cannot delete listing with future confirmed bookings"
+                                data-side="left"
+                                data-tooltip-size="sm"
+                            >
+                                Delete Listing
+                            </button>
+                            {% else %}
                             <button
                                 class="btn-outline text-sm border-red-600 text-red-600 hover:bg-red-50"
                                 onclick="event.stopPropagation()"
                                 type="submit"
-                                {% if future_bookings %}
-                                    title="Cannot delete listing with active bookings"
-                                {% endif %}
                             >
                                 Delete Listing
                             </button>
+                            {% endif %}
                         </form>
                         {% endif %}
                     </footer>
