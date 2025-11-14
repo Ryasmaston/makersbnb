@@ -38,12 +38,19 @@
                             </p>
                         </header>
                         <section class="px-0">
+                            {% if booking.listing_id < 4 %}
                             <img
-                                alt="MakersBNB booking image"
+                                alt="MakersBNB listing image"
                                 loading="lazy"
-                                width="200"
-                                height="200"
-                                class="w-85 object-fill"
+                                class="w-full h-48 object-cover object-center"
+                                style="color: transparent"
+                                src="./static/assets/{{booking.listing_id}}.png"
+                            />
+                            {% else %}
+                            <img
+                                alt="MakersBNB listing image"
+                                loading="lazy"
+                                class="w-full h-48 object-cover object-center"
                                 style="color: transparent"
                                 srcset="
                                     https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=640&q=75  1x,
@@ -51,6 +58,7 @@
                                 "
                                 src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75"
                             />
+                            {% endif %}
                         </section>
                         <footer class="flex flex-col">
                             <div
@@ -246,12 +254,19 @@
                             </p>
                         </header>
                         <section class="px-0">
+                            {% if booking.listing_id < 4 %}
                             <img
-                                alt="MakersBNB booking image"
+                                alt="MakersBNB listing image"
                                 loading="lazy"
-                                width="200"
-                                height="200"
-                                class="w-85 object-fill"
+                                class="w-full h-48 object-cover object-center"
+                                style="color: transparent"
+                                src="./static/assets/{{booking.listing_id}}.png"
+                            />
+                            {% else %}
+                            <img
+                                alt="MakersBNB listing image"
+                                loading="lazy"
+                                class="w-full h-48 object-cover object-center"
                                 style="color: transparent"
                                 srcset="
                                     https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=640&q=75  1x,
@@ -259,6 +274,7 @@
                                 "
                                 src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75"
                             />
+                            {% endif %}
                         </section>
                         <footer class="flex flex-col gap-1">
                             <div
