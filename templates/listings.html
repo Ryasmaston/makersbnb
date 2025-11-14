@@ -257,12 +257,19 @@ block content %}
                     <p class="truncate">{{listing.description}}</p>
                 </header>
                 <section class="px-0">
+                    {% if listing.id < 4 %}
                     <img
                         alt="MakersBNB listing image"
                         loading="lazy"
-                        width="200"
-                        height="200"
-                        class="w-85 object-fill"
+                        class="w-full h-48 object-cover object-center"
+                        style="color: transparent"
+                        src="./static/assets/{{listing.id}}.png"
+                    />
+                    {% else %}
+                    <img
+                        alt="MakersBNB listing image"
+                        loading="lazy"
+                        class="w-full h-48 object-cover object-center"
                         style="color: transparent"
                         srcset="
                             https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=640&q=75  1x,
@@ -270,6 +277,7 @@ block content %}
                         "
                         src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75"
                     />
+                    {% endif %}
                 </section>
                 <footer class="flex items-center gap-2">
                     <span class="badge-outline">
@@ -513,6 +521,33 @@ block content %}
                                 {% endif %}
                             </div>
                         </form>
+                        {% if user and user.get('user_id') == listing.host_id %}
+                        <form
+                            action="/listings/{{ listing.id }}/delete"
+                            method="POST"
+                        >
+                            {% if has_future_bookings.get(listing.id) %}
+                            <button
+                                class="btn-outline text-sm border-red-600 text-red-600 opacity-50 cursor-default hover:bg-white"
+                                onclick="return false;"
+                                type="button"
+                                data-tooltip="Cannot delete listing with future confirmed bookings"
+                                data-side="left"
+                                data-tooltip-size="sm"
+                            >
+                                Delete Listing
+                            </button>
+                            {% else %}
+                            <button
+                                class="btn-outline text-sm border-red-600 text-red-600 hover:bg-red-50"
+                                onclick="event.stopPropagation()"
+                                type="submit"
+                            >
+                                Delete Listing
+                            </button>
+                            {% endif %}
+                        </form>
+                        {% endif %}
                     </footer>
 
                     <button

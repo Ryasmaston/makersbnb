@@ -1,4 +1,5 @@
 from lib.booking import Booking
+from datetime import date
 class BookingRepository:
     def __init__(self, connection):
         self._connection = connection
@@ -46,6 +47,14 @@ class BookingRepository:
         if not rows or rows[0]["total_price"] is None:
             raise ValueError("Booking not found or dates missing")
         return int(rows[0]["total_price"])
+
+    def get_future_bookings_for_listing(self, listing_id):
+            rows = self._connection.execute(
+                "SELECT * FROM bookings WHERE listing_id = %s AND start_date >= %s AND status = 'confirmed'",
+                [listing_id, date.today()]
+            )
+            return rows
+
 
     def deny_overlapping_bookings(self, booking_id):
         """

@@ -61,10 +61,15 @@ def get_listings():
 
     # get confirmed dates per listing
     confirmed_dates_by_listing = {}
+    # check if listings have future confirmed bookings
+    has_future_bookings = {}
     for listing in listings:
         confirmed_dates_by_listing[listing.id] = booking_repo.get_confirmed_booking_dates_for_listing(listing.id)
+        future_bookings = booking_repo.get_future_bookings_for_listing(listing.id)
+        # get_future_bookings_for_listing already filters for confirmed bookings
+        has_future_bookings[listing.id] = len(future_bookings) > 0
 
-    return render_template('listings.html', user=session, listings=listings, confirmed_dates=confirmed_dates_by_listing)
+    return render_template('listings.html', user=session, listings=listings, confirmed_dates=confirmed_dates_by_listing, has_future_bookings=has_future_bookings)
 
 @app.route('/listings', methods=['POST'])
 def post_listings():
@@ -86,6 +91,25 @@ def post_listings():
     new_listing = Listing(None, title, description, price_per_night, start_available_date, end_available_date, host_id)
     listing_repo.create(new_listing)
     return redirect(url_for('get_listings'))
+
+@app.route('/listings/<int:listing_id>/delete', methods=['POST'])
+def delete_listing(listing_id):
+    if 'user_id' not in session:
+        return redirect(url_for('get_index'))
+    connection = get_flask_database_connection(app)
+    listing_repo = ListingRepository(connection)
+    booking_repo = BookingRepository(connection)
+    listing = listing_repo.get_by_id(listing_id)
+    if not listing:
+        return "Listing not found", 404
+    if listing.host_id != session['user_id']:
+        return "Unauthorized", 403
+    future_bookings = booking_repo.get_future_bookings_for_listing(listing_id)
+    if future_bookings:
+        return "Cannot delete listing with active bookings", 400
+    listing_repo.delete(listing_id)
+    return redirect(url_for('get_listings'))
+
 
 @app.route('/bookings', methods=['GET'])
 def get_bookings():
