@@ -50,7 +50,7 @@ class BookingRepository:
 
     def get_future_bookings_for_listing(self, listing_id):
             rows = self._connection.execute(
-                "SELECT * FROM bookings WHERE listing_id = %s AND start_date >= %s",
+                "SELECT * FROM bookings WHERE listing_id = %s AND start_date >= %s AND status = 'confirmed'",
                 [listing_id, date.today()]
             )
             return rows
