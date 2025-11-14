@@ -1,9 +1,9 @@
 {% extends "base.html" %} {% block title %}Home | MakersBnB{% endblock %} {%
-block content %}
-<div class="flex items-center justify-center py-16 px-4">
-    <div class="flex flex-col items-center w-full max-w-lg">
+block body_classes %}overflow-hidden{% endblock %} {% block content %}
+<div class="flex items-center justify-center h-screen px-4">
+    <div class="flex flex-col items-center w-full max-w-xl mt-[-50px]">
         <div id="hero">
-            <h2 class="text-5xl font-bold text-center mt-10">
+            <h2 class="text-5xl font-bold text-center mt-6">
                 Feel at home, anywhere
             </h2>
             <p class="text-center mt-4 text-xl">
@@ -12,7 +12,7 @@ block content %}
             </p>
         </div>
         {% if not user.loggedin %}
-        <div class="card w-100 mt-16 shadow-2xl rounded-2xl">
+        <div class="card w-100 mt-4 shadow-2xl rounded-2xl">
             <header>
                 <h2>Login to your account</h2>
                 <p>

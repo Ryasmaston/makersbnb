@@ -47,4 +47,4 @@ INSERT INTO listings (title, description, price_per_night, start_available_date,
 INSERT INTO bookings (start_date, end_date, listing_id, guest_id, status) VALUES
 ('2025-04-01', '2025-04-05', 1, 2, 'confirmed'),
 ('2025-05-10', '2025-05-15', 2, 3, 'pending'),
-('2025-07-20', '2025-07-25', 3, 2, 'cancelled');
+('2025-07-20', '2025-07-25', 3, 2, 'denied');
