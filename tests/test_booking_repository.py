@@ -76,3 +76,27 @@ def test_get_confirmed_booking_dates_for_listing(db_connection):
     assert confirmed_dates == [
         {"start_date": "2025-04-01", "end_date": "2025-04-05"}
     ]
+
+def test_all_with_guest_id_join_listings(db_connection):
+    db_connection.seed("seeds/makersbnb.sql")
+    repo = BookingRepository(db_connection)
+
+    bookings = repo.all_with_guest_id_join_listings(2)
+
+    assert len(bookings) == 2
+    assert bookings[0]['id'] == 1
+    assert bookings[0]['listing_title'] == 'Cozy Cabin in the Woods'
+    assert bookings[0]['listing_description'] == 'A small rustic cabin with beautiful forest views.'
+    assert bookings[0]['total_price'] == 480
+
+def test_all_with_host_id_join_listings(db_connection):
+    db_connection.seed("seeds/makersbnb.sql")
+    repo = BookingRepository(db_connection)
+
+    bookings = repo.all_with_host_id_join_listings(1)
+
+    assert len(bookings) == 2
+    assert bookings[0]['id'] == 1
+    assert bookings[0]['listing_title'] == 'Cozy Cabin in the Woods'
+    assert bookings[0]['status'] == 'confirmed'
+    assert bookings[0]['total_price'] == 480

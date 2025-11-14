@@ -67,9 +67,10 @@ def post_listings():
 
 @app.route('/bookings', methods=['GET'])
 def get_bookings():
-    booking_repo = BookingRepository(get_flask_database_connection(app))
-    outbound_bookings = booking_repo.all_with_guest_id(session['user_id'])
-    inbound_bookings = booking_repo.all_with_host_id(session['user_id'])
+    connection = get_flask_database_connection(app)
+    booking_repo = BookingRepository(connection)
+    outbound_bookings = booking_repo.all_with_guest_id_join_listings(session['user_id'])
+    inbound_bookings = booking_repo.all_with_host_id_join_listings(session['user_id'])
     return render_template('bookings.html', user=session, outbound_bookings=outbound_bookings, inbound_bookings=inbound_bookings)
 
 @app.route('/bookings/new', methods=['POST'])

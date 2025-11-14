@@ -1,57 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Bookings | MakersBnB</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/style.css') }}"
+        />
     </head>
-    {% extends "base.html" %} {% block title %}Bookings | MakersBnB{% endblock %} {%
-    block content %}
-    <div class="flex items-center justify-center h-[calc(100vh-76px)] overflow-y-auto">
-        <div class="flex flex-col items-center translate-y-[calc(-76px/2)] w-full px-6">
-            <div class="mb-10 flex flex-col align-center">
-                <h2 class="text-5xl font-bold text-center mb-8">Bookings</h2>
+    {% extends "base.html" %} {% block title %}Bookings | MakersBnB{% endblock
+    %} {% block content %}
+    <div class="flex items-center justify-center py-10 px-4">
+        <div class="flex flex-col items-center w-full max-w-6xl">
+            <div class="mb-4 flex flex-col align-center">
+                <h2 class="text-5xl font-bold text-center mb-4">Bookings</h2>
             </div>
 
             <section class="w-full max-w-5xl mb-12">
-                <h3 class="text-3xl font-semibold mb-6 text-center">Bookings I Have Made</h3>
+                <h3 class="text-3xl font-semibold mb-6 text-center">
+                    Your Bookings
+                </h3>
 
                 {% if outbound_bookings %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
+                >
                     {% for booking in outbound_bookings %}
                     <div
-                        class="card flex flex-col justify-between p-6 shadow-2xl rounded-2xl transition-transform duration-200 hover:-translate-y-1 hover:scale-[1.01]"
+                        class="card w-85 h-min flex flex-col justify-end shadow-2xl rounded-2xl cursor-pointer transition-transform transition-shadow duration-[220ms] ease-[cubic-bezier(.22,.94,.16,1)] will-change-[transform,box-shadow] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(75,75,75,0.32)]"
+                        onclick="document.getElementById('booking-{{booking.id}}-dialog').showModal()"
                     >
-                        <header class="mb-3">
-                            <h4 class="text-xl font-bold mb-1">
-                                Booking #{{booking.id}}
-                            </h4>
-                            <p class="text-gray-600">
-                                Listing ID: {{booking.listing_id}}
+                        <header>
+                            <h3 class="truncate">{{booking.listing_title}}</h3>
+                            <p class="truncate">
+                                {{booking.listing_description}}
                             </p>
                         </header>
-
-                        <section class="mb-4">
-                            <p><strong>Start Date:</strong> {{booking.start_date}}</p>
-                            <p><strong>End Date:</strong> {{booking.end_date}}</p>
-                            <p><strong>Status:</strong>
-                                <span class="
-                                    {% if booking.status == 'confirmed' %}text-green-600{% elif booking.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %}
-                                    font-semibold
-                                ">
+                        <section class="px-0">
+                            <img
+                                alt="MakersBNB booking image"
+                                loading="lazy"
+                                width="200"
+                                height="200"
+                                class="w-85 object-fill"
+                                style="color: transparent"
+                                srcset="
+                                    https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=640&q=75  1x,
+                                    https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75 2x
+                                "
+                                src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75"
+                            />
+                        </section>
+                        <footer class="flex flex-col gap-1">
+                            <div
+                                class="flex flex-col items-center justify-between"
+                            >
+                                <span class="text-sm text-gray-600"
+                                    >{{booking.start_date}} -
+                                    {{booking.end_date}}</span
+                                >
+                                <span
+                                    class="text-center mt-2 font-medium tabular-nums"
+                                >
+                                    £{{booking.total_price}} total
+                                </span>
+                            </div>
+                            <div
+                                class="flex flex-col items-center justify-between"
+                            >
+                                <!--<span class="text-xs text-gray-500"
+                                    >Booking #{{booking.id}}</span
+                                >-->
+                                <span
+                                    class="{% if booking.status == 'confirmed' %}text-green-600{% elif booking.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %} font-semibold mt-2 text-sm"
+                                >
                                     {{booking.status | capitalize}}
                                 </span>
-                            </p>
-                        </section>
-
-                        <footer class="mt-auto flex justify-end">
-                            <button
-                                class="btn-outline text-sm"
-                                onclick="document.getElementById('booking-{{booking.id}}-dialog').showModal()"
-                            >
-                                View Details
-                            </button>
+                            </div>
                         </footer>
                     </div>
 
@@ -62,85 +88,175 @@
                     >
                         <div class="p-6">
                             <header class="mb-4">
-                                <h2 class="text-2xl font-semibold">Booking #{{booking.id}}</h2>
+                                <h2 class="text-2xl font-semibold">
+                                    {{booking.listing_title}}
+                                </h2>
                             </header>
-                            <section class="space-y-2">
-                                <p><strong>Listing ID:</strong> {{booking.listing_id}}</p>
-                                <p><strong>Guest ID:</strong> {{booking.guest_id}}</p>
-                                <p><strong>Start Date:</strong> {{booking.start_date}}</p>
-                                <p><strong>End Date:</strong> {{booking.end_date}}</p>
-                                <p><strong>Status:</strong>
-                                    <span class="
-                                        {% if booking.status == 'confirmed' %}text-green-600{% elif booking.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %}
-                                        font-semibold
-                                    ">
-                                        {{booking.status | capitalize}}
-                                    </span>
+                            <section class="space-y-3">
+                                <p class="text-gray-700">
+                                    {{booking.listing_description}}
                                 </p>
+                                <div class="border-t pt-3 space-y-2">
+                                    <p>
+                                        <strong>Booking ID:</strong>
+                                        {{booking.id}}
+                                    </p>
+                                    <p>
+                                        <strong>Start Date:</strong>
+                                        {{booking.start_date}}
+                                    </p>
+                                    <p>
+                                        <strong>End Date:</strong>
+                                        {{booking.end_date}}
+                                    </p>
+                                    <p>
+                                        <strong>Total Price:</strong>
+                                        <span class="font-semibold"
+                                            >£{{booking.total_price}}</span
+                                        >
+                                    </p>
+                                    <p>
+                                        <strong>Status:</strong>
+                                        <span
+                                            class="{% if booking.status == 'confirmed' %}text-green-600{% elif booking.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %} font-semibold"
+                                        >
+                                            {{booking.status | capitalize}}
+                                        </span>
+                                    </p>
+                                </div>
                             </section>
-                            <footer class="mt-6 flex justify-end">
-                                <button class="btn" onclick="this.closest('dialog').close()">Close</button>
-                            </footer>
+                            <footer class="mt-2 flex justify-end"></footer>
+
+                            <button
+                                type="button"
+                                aria-label="Close dialog"
+                                onclick="this.closest('dialog').close()"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="lucide lucide-x-icon lucide-x"
+                                >
+                                    <path d="M18 6 6 18" />
+                                    <path d="m6 6 12 12" />
+                                </svg>
+                            </button>
                         </div>
                     </dialog>
                     {% endfor %}
                 </div>
                 {% else %}
-                <p class="text-gray-500 text-center mt-6">You haven’t made any bookings yet.</p>
+                <p class="text-gray-500 text-center mt-6">
+                    You haven’t made any bookings yet.
+                </p>
                 {% endif %}
             </section>
 
             <section class="w-full max-w-5xl">
-                <h3 class="text-3xl font-semibold mb-6 text-center">Pending Booking Requests</h3>
+                <h3 class="text-3xl font-semibold mb-6 text-center">
+                    Your listings' bookings
+                </h3>
 
                 {% if inbound_bookings %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
+                >
                     {% for booking in inbound_bookings %}
                     <div
-                        class="card flex flex-col justify-between p-6 shadow-2xl rounded-2xl transition-transform duration-200 hover:-translate-y-1 hover:scale-[1.01]"
+                        class="card w-85 h-min flex flex-col justify-end shadow-2xl rounded-2xl transition-transform transition-shadow duration-[220ms] ease-[cubic-bezier(.22,.94,.16,1)] will-change-[transform,box-shadow] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(75,75,75,0.32)]"
                     >
-                        <header class="mb-3">
-                            <h4 class="text-xl font-bold mb-1">
-                                Booking #{{booking.id}}
-                            </h4>
-                            <p class="text-gray-600">
-                                Listing ID: {{booking.listing_id}}
+                        <header>
+                            <h3 class="truncate">{{booking.listing_title}}</h3>
+                            <p class="truncate">
+                                {{booking.listing_description}}
                             </p>
                         </header>
-
-                        <section class="mb-4">
-                            <p><strong>Guest ID:</strong> {{booking.guest_id}}</p>
-                            <p><strong>Start Date:</strong> {{booking.start_date}}</p>
-                            <p><strong>End Date:</strong> {{booking.end_date}}</p>
-                            <p><strong>Status:</strong>
-                                <span class="
-                                    {% if booking.status == 'confirmed' %}text-green-600{% elif booking.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %}
-                                    font-semibold
-                                ">
+                        <section class="px-0">
+                            <img
+                                alt="MakersBNB booking image"
+                                loading="lazy"
+                                width="200"
+                                height="200"
+                                class="w-85 object-fill"
+                                style="color: transparent"
+                                srcset="
+                                    https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=640&q=75  1x,
+                                    https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75 2x
+                                "
+                                src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80&w=1080&q=75"
+                            />
+                        </section>
+                        <footer class="flex flex-col gap-1">
+                            <div
+                                class="flex flex-col items-center justify-between"
+                            >
+                                <span class="text-sm text-gray-600"
+                                    >{{booking.start_date}} -
+                                    {{booking.end_date}}</span
+                                >
+                                <span class="mt-2 font-medium tabular-nums">
+                                    £{{booking.total_price}} total
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <!--<span class="text-xs text-gray-500"
+                                    >Booking #{{booking.id}} • Guest
+                                    #{{booking.guest_id}}</span
+                                >-->
+                                <span
+                                    class="{% if booking.status == 'confirmed' %}text-green-600{% elif booking.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %} font-semibold text-sm"
+                                >
                                     {{booking.status | capitalize}}
                                 </span>
-                            </p>
-                        </section>
-
-                        <footer class="mt-auto flex justify-end gap-3">
-                            {% if booking.status == 'pending' %}
-                            <form action="/bookings/{{booking.id}}/confirm" method="POST">
-                                <button class="btn text-sm bg-green-600 hover:bg-green-700">Confirm</button>
-                            </form>
-                            <form action="/bookings/{{booking.id}}/reject" method="POST">
-                                <button class="btn-outline text-sm border-red-600 text-red-600 hover:bg-red-50">Reject</button>
-                            </form>
-                            {% else %}
-                            <button class="btn-outline text-sm opacity-70 cursor-not-allowed" disabled>
-                                {{booking.status | capitalize}}
-                            </button>
-                            {% endif %}
+                            </div>
+                            <div class="mt-2 flex justify-end gap-2">
+                                {% if booking.status == 'pending' %}
+                                <form
+                                    action="/bookings/{{booking.id}}/confirm"
+                                    method="POST"
+                                >
+                                    <button
+                                        class="btn text-sm bg-green-600 hover:bg-green-700"
+                                        onclick="event.stopPropagation()"
+                                    >
+                                        Confirm
+                                    </button>
+                                </form>
+                                <form
+                                    action="/bookings/{{booking.id}}/reject"
+                                    method="POST"
+                                >
+                                    <button
+                                        class="btn-outline text-sm border-red-600 text-red-600 hover:bg-red-50"
+                                        onclick="event.stopPropagation()"
+                                    >
+                                        Reject
+                                    </button>
+                                </form>
+                                {% else %}
+                                <button
+                                    class="btn-outline text-sm opacity-70 cursor-not-allowed"
+                                    disabled
+                                >
+                                    {{booking.status | capitalize}}
+                                </button>
+                                {% endif %}
+                            </div>
                         </footer>
                     </div>
                     {% endfor %}
                 </div>
                 {% else %}
-                <p class="text-gray-500 text-center mt-6">You have no pending booking requests.</p>
+                <p class="text-gray-500 text-center mt-6">
+                    You have no pending booking requests.
+                </p>
                 {% endif %}
             </section>
         </div>
