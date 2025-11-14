@@ -474,6 +474,20 @@ block content %}
                                         £0
                                     </p>
                                 </div>
+                                {% if not user %}
+                                <button
+                                    class="btn cursor-default opacity-50"
+                                    id="book-btn-{{listing.id}}"
+                                    action="/bookings/new"
+                                    type="button"
+                                    data-tooltip="Sign in to book"
+                                    data-side="top"
+                                    data-tooltip-size="m"
+                                    onclick="return false;"
+                                >
+                                    Book
+                                </button>
+                                {% else %}
                                 <button
                                     class="btn"
                                     id="book-btn-{{listing.id}}"
@@ -483,6 +497,7 @@ block content %}
                                 >
                                     Book
                                 </button>
+                                {% endif %}
                             </div>
                         </form>
                     </footer>
@@ -554,12 +569,16 @@ block content %}
                                 totalPriceElement.textContent = `£${totalPrice}`;
 
                                 // enable button if more than 0 nights
-                                bookButton.disabled = (diffDays === 0) || !isLoggedIn;
+                                if (isLoggedIn) {
+                                    bookButton.disabled = (diffDays === 0);
+                                }
                             } else {
                                 // reset if only 1 date is selceted
                                 totalNightsElement.textContent = "Select dates";
                                 totalPriceElement.textContent = "£0";
-                                bookButton.disabled = true;
+                                if (isLoggedIn) {
+                                    bookButton.disabled = true;
+                                }
                             }
                         }
                     });
@@ -571,7 +590,9 @@ block content %}
                         fpInstance.setDate([], false);
                         document.getElementById("total-nights-" + listingId).textContent = "Select dates";
                         document.getElementById("total-price-" + listingId).textContent = "£0";
-                        document.getElementById("book-btn-" + listingId).disabled = true;
+                        if (isLoggedIn) {
+                            document.getElementById("book-btn-" + listingId).disabled = true;
+                        }
                     });
                 });
             </script>
