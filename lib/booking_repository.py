@@ -47,9 +47,35 @@ class BookingRepository:
             raise ValueError("Booking not found or dates missing")
         return int(rows[0]["total_price"])
 
+    def cancel_overlapping_bookings(self, booking_id):
+        """
+        Cancel all pending bookings that overlap with the given booking.
+        Returns the number of bookings cancelled.
+        """
+        # get the booking details
+        booking = self.find(booking_id)
+
+        # find all pending bookings for the same listing that overlap
+        sql = """
+        UPDATE bookings
+        SET status = 'cancelled'
+        WHERE listing_id = %s
+        AND id != %s
+        AND status = 'pending'
+        AND start_date < %s
+        AND end_date > %s
+        RETURNING id;
+        """
+        rows = self._connection.execute(
+            sql,
+            [booking.listing_id, booking_id, booking.end_date, booking.start_date]
+        )
+        return len(rows) if rows else 0
+
     def approve_booking(self, booking_id):
         """
         Set booking from 'pending' -> 'confirmed'.
+        Also cancels any overlapping pending bookings for the same listing.
         Returns True if updated, False otherwise.
         """
         sql = """
@@ -59,7 +85,13 @@ class BookingRepository:
         RETURNING id;
         """
         rows = self._connection.execute(sql, [booking_id])
-        return bool(rows)
+
+        if rows:
+            # cancel any overlapping pending bookings
+            self.cancel_overlapping_bookings(booking_id)
+            return True
+
+        return False
 
     def get_confirmed_booking_dates_for_listing(self, listing_id):
         """

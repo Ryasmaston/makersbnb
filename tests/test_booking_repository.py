@@ -100,3 +100,76 @@ def test_all_with_host_id_join_listings(db_connection):
     assert bookings[0]['listing_title'] == 'Cozy Cabin in the Woods'
     assert bookings[0]['status'] == 'confirmed'
     assert bookings[0]['total_price'] == 480
+
+def test_cancel_overlapping_bookings(db_connection):
+    db_connection.seed("seeds/makersbnb.sql")
+    repo = BookingRepository(db_connection)
+
+    # Create a new pending booking for listing 1
+    repo.create(Booking(None, date(2025, 6, 1), date(2025, 6, 5), 1, 3, 'pending'))
+
+    # Create overlapping pending bookings for listing 1
+    repo.create(Booking(None, date(2025, 6, 3), date(2025, 6, 7), 1, 3, 'pending'))
+    repo.create(Booking(None, date(2025, 6, 6), date(2025, 6, 10), 1, 3, 'pending'))
+
+    # Confirm booking 4 (2025-06-01 to 2025-06-05)
+    repo.approve_booking(4)
+
+    # Check that booking 5 was cancelled (overlaps: 06-03 to 06-07)
+    booking_5 = repo.find(5)
+    assert booking_5.status == 'cancelled'
+
+    # Check that booking 6 was NOT cancelled (doesn't overlap: 06-06 to 06-10)
+    booking_6 = repo.find(6)
+    assert booking_6.status == 'pending'
+
+def test_all_overlap_scenarios(db_connection):
+    """Test all possible overlap scenarios when confirming a booking"""
+    db_connection.seed("seeds/makersbnb.sql")
+    repo = BookingRepository(db_connection)
+
+    # create the booking we'll confirm: June 10-15 for listing 1
+    confirmed_booking = repo.create(Booking(None, date(2025, 6, 10), date(2025, 6, 15), 1, 3, 'pending'))
+
+    # scenario 1: pending booking completely contains confirmed (June 8-20)
+    repo.create(Booking(None, date(2025, 6, 8), date(2025, 6, 20), 1, 3, 'pending'))
+
+    # scenario 2: confirmed completely contains pending (June 11-14)
+    repo.create(Booking(None, date(2025, 6, 11), date(2025, 6, 14), 1, 3, 'pending'))
+
+    # scenario 3: pending starts before, ends during confirmed (June 8-12)
+    repo.create(Booking(None, date(2025, 6, 8), date(2025, 6, 12), 1, 3, 'pending'))
+
+    # scenario 4: pending starts during, ends after confirmed (June 13-18)
+    repo.create(Booking(None, date(2025, 6, 13), date(2025, 6, 18), 1, 3, 'pending'))
+
+    # scenario 5: exact match (June 10-15)
+    repo.create(Booking(None, date(2025, 6, 10), date(2025, 6, 15), 1, 3, 'pending'))
+
+    # scenario 6: no overlap - before (June 5-8)
+    repo.create(Booking(None, date(2025, 6, 5), date(2025, 6, 8), 1, 3, 'pending'))
+
+    # scenario 7: no overlap - after (June 18-22)
+    repo.create(Booking(None, date(2025, 6, 18), date(2025, 6, 22), 1, 3, 'pending'))
+
+    # scenario 8: adjacent - ends when confirmed starts (June 8-10)
+    repo.create(Booking(None, date(2025, 6, 8), date(2025, 6, 10), 1, 3, 'pending'))
+
+    # scenario 9: adjacent - starts when confirmed ends (June 15-18)
+    repo.create(Booking(None, date(2025, 6, 15), date(2025, 6, 18), 1, 3, 'pending'))
+
+    # confirm the booking
+    repo.approve_booking(confirmed_booking.id)
+
+    # assert overlapping bookings were cancelled
+    assert repo.find(5).status == 'cancelled'  # scenario 1: contains confirmed
+    assert repo.find(6).status == 'cancelled'  # scenario 2: contained by confirmed
+    assert repo.find(7).status == 'cancelled'  # scenario 3: starts before, ends during
+    assert repo.find(8).status == 'cancelled'  # scenario 4: starts during, ends after
+    assert repo.find(9).status == 'cancelled'  # scenario 5: exact match
+
+    # assert non-overlapping bookings are pending
+    assert repo.find(10).status == 'pending'  # scenario 6: before
+    assert repo.find(11).status == 'pending'  # scenario 7: after
+    assert repo.find(12).status == 'pending'  # scenario 8: adjacent before
+    assert repo.find(13).status == 'pending'  # scenario 9: adjacent after
