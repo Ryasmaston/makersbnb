@@ -56,3 +56,53 @@ class ListingRepository:
             item = Listing(row["id"], row["title"], row["description"], row["price_per_night"], row["start_available_date"], row["end_available_date"], row["host_id"])
             listings.append(item)
         return listings
+
+    # Filter and sort listings based on provided criteria
+    # Returns all listings if no filters are provided
+    def filter(self, title=None, description=None, price_sort=None, start_date=None, end_date=None):
+        # Start with base query
+        query = "SELECT * FROM listings WHERE 1=1"
+        params = []
+
+        # Add title filter if provided
+        if title:
+            query += " AND title ILIKE %s"
+            params.append(f"%{title}%")
+
+        # Add description filter if provided
+        if description:
+            query += " AND description ILIKE %s"
+            params.append(f"%{description}%")
+
+        # Add date range filter if provided
+        if start_date and end_date:
+            query += " AND start_available_date <= %s AND end_available_date >= %s"
+            params.append(start_date)
+            params.append(end_date)
+
+        # Add price sorting if provided
+        if price_sort == 'ascending':
+            query += " ORDER BY price_per_night ASC"
+        elif price_sort == 'descending':
+            query += " ORDER BY price_per_night DESC"
+        else:
+            query += " ORDER BY id DESC"  # Default sort by newest
+
+        # Execute query
+        rows = self._connection.execute(query, params)
+
+        # Convert rows to Listing objects
+        listings = []
+        for row in rows:
+            item = Listing(
+                row["id"],
+                row["title"],
+                row["description"],
+                row["price_per_night"],
+                row["start_available_date"],
+                row["end_available_date"],
+                row["host_id"]
+            )
+            listings.append(item)
+
+        return listings

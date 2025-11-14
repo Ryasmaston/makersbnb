@@ -35,7 +35,29 @@ def get_listings():
     connection = get_flask_database_connection(app)
     listing_repo = ListingRepository(connection)
     booking_repo = BookingRepository(connection)
-    listings = listing_repo.all()
+
+    # Get filter parameters from query string
+    title = request.args.get('title', '').strip()
+    description = request.args.get('description', '').strip()
+    price_sort = request.args.get('price-filter')
+    date_range = request.args.get('filter_date_range', '').strip()
+
+    # Parse date range if provided
+    start_date = None
+    end_date = None
+    if date_range and ' to ' in date_range:
+        dates = date_range.split(' to ')
+        start_date = dates[0].strip()
+        end_date = dates[1].strip()
+
+    # Get filtered listings
+    listings = listing_repo.filter(
+        title=title if title else None,
+        description=description if description else None,
+        price_sort=price_sort,
+        start_date=start_date,
+        end_date=end_date
+    )
 
     # get confirmed dates per listing
     confirmed_dates_by_listing = {}

@@ -4,117 +4,245 @@ block content %}
     <div class="flex flex-col items-center w-full max-w-6xl">
         <div class="mb-5 flex flex-col align-center">
             <h2 class="text-5xl font-bold text-center">Listings</h2>
+            <div>
+                <button
+                    type="button"
+                    onclick="document.getElementById('filter-listing-dialog').showModal()"
+                    class="btn-outline mt-6 mb-4"
+                >
+                    Filter Listings
+                </button>
 
-            {% if user %}
-            <button
-                type="button"
-                onclick="document.getElementById('create-listing-dialog').showModal()"
-                class="btn-outline mt-6 mb-4"
-            >
-                Create Listing
-            </button>
+                <dialog
+                    id="filter-listing-dialog"
+                    class="dialog w-full sm:max-w-[425px] max-h-[612px]"
+                    aria-labelledby="filter-listing-dialog-title"
+                    aria-describedby="filter-listing-dialog-description"
+                    onclick="if (event.target === this) this.close()"
+                    scrol
+                >
+                    <div class="overflow-y-auto scrollbar">
+                        <header>
+                            <h2 id="create-listing-dialog-header">
+                                Filter Listings
+                            </h2>
+                        </header>
 
-            <dialog
-                id="create-listing-dialog"
-                class="dialog w-full sm:max-w-[425px] max-h-[612px]"
-                aria-labelledby="create-listing-dialog-title"
-                aria-describedby="create-listing-dialog-description"
-                onclick="if (event.target === this) this.close()"
-                scrol
-            >
-                <div class="overflow-y-auto scrollbar">
-                    <header>
-                        <h2 id="create-listing-dialog-header">
-                            Create Listing
-                        </h2>
-                    </header>
-
-                    <section>
-                        <form
-                            class="form grid gap-4"
-                            action="/listings"
-                            method="POST"
-                        >
-                            <div class="grid gap-3">
-                                <label for="title">Title</label>
-                                <input
-                                    type="text"
-                                    value=""
-                                    id="title"
-                                    name="title"
-                                    autofocus
-                                />
-                            </div>
-                            <div class="grid gap-3">
-                                <label for="description">Description</label>
-                                <textarea
-                                    class="textarea"
-                                    placeholder=""
-                                    value=""
-                                    id="description"
-                                    name="description"
-                                ></textarea>
-                            </div>
-                            <div class="grid gap-3">
-                                <label for="price_per_night"
-                                    >Price per night (£)</label
-                                >
-                                <input
-                                    type="number"
-                                    value=""
-                                    id="price_per_night"
-                                    name="price_per_night"
-                                    min="0"
-                                    step="1"
-                                />
-                            </div>
-                            <div class="grid gap-3">
-                                <label for="available_date_range"
-                                    >Select Available dates</label
-                                >
-                                <input
-                                    type="text"
-                                    id="available_date_range"
-                                    name="available_date_range"
-                                    placeholder="Select date range"
-                                    readonly
-                                />
-                            </div>
-
-                            <button
-                                class="btn"
-                                onclick="this.closest('dialog').close()"
-                                type="submit"
+                        <section>
+                            <form
+                                class="form grid gap-4"
+                                action="/listings"
+                                method="GET"
                             >
-                                Create
-                            </button>
-                        </form>
-                    </section>
+                                <div class="grid gap-3">
+                                    <label for="title">Title</label>
+                                    <input
+                                        type="text"
+                                        value=""
+                                        id="title"
+                                        name="title"
+                                        autofocus
+                                    />
+                                </div>
+                                <div class="grid gap-3">
+                                    <label for="description">Description</label>
+                                    <textarea
+                                        class="textarea"
+                                        placeholder=""
+                                        value=""
+                                        id="description"
+                                        name="description"
+                                    ></textarea>
+                                </div>
+                                <div class="grid gap-3">
+                                    <label>Sort price by</label>
+                                    <fieldset class="grid gap-3">
+                                        <label class="label"
+                                            ><input
+                                                type="radio"
+                                                name="price-filter"
+                                                value="ascending"
+                                                class="input"
+                                            />Low to High</label
+                                        >
+                                        <label class="label"
+                                            ><input
+                                                type="radio"
+                                                name="price-filter"
+                                                value="descending"
+                                                class="input"
+                                            />High to Low</label
+                                        >
+                                    </fieldset>
+                                </div>
+                                <div class="grid gap-3">
+                                    <label for="filter_date_range"
+                                        >Select Available dates</label
+                                    >
+                                    <input
+                                        type="text"
+                                        id="filter_date_range"
+                                        name="filter_date_range"
+                                        placeholder="Select date range"
+                                        readonly
+                                    />
+                                </div>
+                                <div
+                                    class="flex flex-row gap-2 justify-center flex-fill"
+                                >
+                                    <button
+                                        class="btn"
+                                        type="button"
+                                        onclick="window.location.href='/listings'; this.closest('dialog').close();"
+                                    >
+                                        Reset
+                                    </button>
+                                    <button
+                                        class="btn"
+                                        onclick="this.closest('dialog').close()"
+                                        type="submit"
+                                    >
+                                        Filter
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
 
-                    <button
-                        type="button"
-                        aria-label="Close dialog"
-                        onclick="this.closest('dialog').close()"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="lucide lucide-x-icon lucide-x"
+                        <button
+                            type="button"
+                            aria-label="Close dialog"
+                            onclick="this.closest('dialog').close()"
                         >
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </dialog>
-            {% endif %}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-x-icon lucide-x"
+                            >
+                                <path d="M18 6 6 18" />
+                                <path d="m6 6 12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </dialog>
+
+                {% if user %}
+                <button
+                    type="button"
+                    onclick="document.getElementById('create-listing-dialog').showModal()"
+                    class="btn-outline mt-6 mb-4"
+                >
+                    Create Listing
+                </button>
+
+                <dialog
+                    id="create-listing-dialog"
+                    class="dialog w-full sm:max-w-[425px] max-h-[612px]"
+                    aria-labelledby="create-listing-dialog-title"
+                    aria-describedby="create-listing-dialog-description"
+                    onclick="if (event.target === this) this.close()"
+                    scrol
+                >
+                    <div class="overflow-y-auto scrollbar">
+                        <header>
+                            <h2 id="create-listing-dialog-header">
+                                Create Listing
+                            </h2>
+                        </header>
+
+                        <section>
+                            <form
+                                class="form grid gap-4"
+                                action="/listings"
+                                method="GET"
+                            >
+                                <div class="grid gap-3">
+                                    <label for="title">Title</label>
+                                    <input
+                                        type="text"
+                                        value=""
+                                        id="title"
+                                        name="title"
+                                        autofocus
+                                    />
+                                </div>
+                                <div class="grid gap-3">
+                                    <label for="description">Description</label>
+                                    <textarea
+                                        class="textarea"
+                                        placeholder=""
+                                        value=""
+                                        id="description"
+                                        name="description"
+                                    ></textarea>
+                                </div>
+                                <div class="grid gap-3">
+                                    <label for="price_per_night"
+                                        >Price per night (£)</label
+                                    >
+                                    <input
+                                        type="number"
+                                        value=""
+                                        id="price_per_night"
+                                        name="price_per_night"
+                                        min="0"
+                                        step="1"
+                                    />
+                                </div>
+                                <div class="grid gap-3">
+                                    <label for="available_date_range"
+                                        >Select Available dates</label
+                                    >
+                                    <input
+                                        type="text"
+                                        id="available_date_range"
+                                        name="available_date_range"
+                                        placeholder="Select date range"
+                                        readonly
+                                    />
+                                </div>
+
+                                <button
+                                    class="btn"
+                                    onclick="this.closest('dialog').close()"
+                                    type="submit"
+                                >
+                                    Create
+                                </button>
+                            </form>
+                        </section>
+
+                        <button
+                            type="button"
+                            aria-label="Close dialog"
+                            onclick="this.closest('dialog').close()"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-x-icon lucide-x"
+                            >
+                                <path d="M18 6 6 18" />
+                                <path d="m6 6 12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </dialog>
+                {% endif %}
+            </div>
         </div>
 
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -456,6 +584,15 @@ block content %}
 
 <script>
     flatpickr("#available_date_range", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        inline: true,
+    });
+</script>
+
+<script>
+    flatpickr("#filter_date_range", {
         mode: "range",
         dateFormat: "Y-m-d",
         minDate: "today",
