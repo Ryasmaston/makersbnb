@@ -1,3 +1,27 @@
+---
+
+<p align="center">
+    <img width="1080" height="720" src="https://files.catbox.moe/eiew9b.png">
+</p>
+
+<h1 align="center">
+    MakersBNB
+</h1>
+
+<p align="center">
+    AirBNB clone made with Flask and Basecoat UI.
+</p>
+
+---
+## Contributors
+- [Milo Tek](https://github.com/pixeljammed)
+- [Tom Peace](https://github.com/thomaspeace)
+- [Ryan Osmaston](https://github.com/Ryasmaston)
+- [Vincent Adeola](https://github.com/dir-V)
+- [Josh Hil](https://github.com/JoshHil97)
+- [Daniel Pascaru](https://github.com/harpleen)
+
+
 ## Setup
 
 ```shell
